@@ -6,8 +6,15 @@
 package com.github.minijaoplus4.calendarioacademico;
 
 /**
- *
- * @author Estevao
+ * Enum das Constantes de tipo de Eventos
+ * Feriado Nacional, Feriado Municipal, Ponto Facutativo, Recesso Acadêmico,
+ * Evento.
+ * 
+ * @author Estevão Cristino
+ * 
+ * @version 1.0
+ * 
+ * @since Release 1 da aplicação
  */
 public enum Classificacao {
     

@@ -6,8 +6,14 @@
 package com.github.minijaoplus4.calendarioacademico;
 
 /**
- *
- * @author Estevao
+ * Enum das Constantes do nome das Regionaias
+ * Catalão, Goiânia, Goiás, Jataí e Todas.
+ * 
+ * @author Estevão Cristino
+ * 
+ * @version 1.0
+ * 
+ * @since Release 1 da aplicação
  */
 public enum Regional {
     
