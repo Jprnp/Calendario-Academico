@@ -115,4 +115,8 @@ public class CsvUtil {
 		});
 		return eventos;
 	}
+        
+        public static ArrayList<Data> addEvento(ArrayList<Data> eventos, DATA data){
+            eventos.add(data);
+        }
 }
