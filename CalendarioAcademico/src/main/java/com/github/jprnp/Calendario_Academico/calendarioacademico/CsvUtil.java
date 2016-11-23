@@ -21,6 +21,7 @@ public class CsvUtil {
 	/**
 	 * Recebe a lista de eventos + do evento a ser excluído e 
 	 * deleta tal evento da lista.
+	 * @author Hyago Vieira de Souza
 	 * @param lista Lista de Eventos no estado atual do programa
 	 * @param idEvento ID do evento a ser excluído
 	 * @return Lista após a exclusão do evento
