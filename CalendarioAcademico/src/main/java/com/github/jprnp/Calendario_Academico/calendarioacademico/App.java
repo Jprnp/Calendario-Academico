@@ -328,7 +328,6 @@ public class App {
 
         boolean done = false;
         do {
-            leitor = null;
             dt = leitor.nextLine();
             if (dt.matches(regex)) {
                 done = true;
