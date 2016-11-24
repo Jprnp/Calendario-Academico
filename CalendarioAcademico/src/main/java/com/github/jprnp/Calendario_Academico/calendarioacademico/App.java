@@ -23,10 +23,7 @@ public class App {
         int op;
         boolean sair = false;
         try {
-            catalao = CsvUtil.loadCsv(Regional.CATALAO);
-            goiania = CsvUtil.loadCsv(Regional.GOIANIA);
-            goias = CsvUtil.loadCsv(Regional.GOIAS);
-            jatai = CsvUtil.loadCsv(Regional.JATAI);
+            carregarCalendarios();
             do {
                 mainMenu();
                 op = leitor.nextInt();
@@ -37,11 +34,9 @@ public class App {
                     case 2:
                         criarEvento();
                     case 3:
+                        editarCalendario();
                     case 4:
-                        CsvUtil.generateCsv(catalao);
-                        CsvUtil.generateCsv(goiania);
-                        CsvUtil.generateCsv(goias);
-                        CsvUtil.generateCsv(jatai);
+                        salvarCalendario();
                         break;
                     case 0:
                         sair = true;
@@ -346,4 +341,106 @@ public class App {
 
         return dt;
     }
+
+    public static void carregarCalendarios() {
+        catalao = CsvUtil.loadCsv(Regional.CATALAO);
+        goiania = CsvUtil.loadCsv(Regional.GOIANIA);
+        goias = CsvUtil.loadCsv(Regional.GOIAS);
+        jatai = CsvUtil.loadCsv(Regional.JATAI);
+    }
+
+    private static void salvarCalendario() {
+        CsvUtil.generateCsv(catalao);
+        CsvUtil.generateCsv(goiania);
+        CsvUtil.generateCsv(goias);
+        CsvUtil.generateCsv(jatai);
+    }
+
+    private static void editarCalendario() {
+        int id, codReg, indexCalen;
+        String idStr;
+        System.out.println("\t Editar Calendario");
+        System.out.println("entre com o Id do evento:");
+        id = leitor.nextInt();
+        idStr = "" + id;
+        codReg = Integer.parseInt(idStr.substring(0, 1));
+        switch (codReg) {
+            case 5:
+            case 1:
+                int index = buscarDataId(id, catalao);
+                if (index != -1) {
+                    editarCalendario2(index);
+                } else {
+                    System.out.println("Não encontramos Evento com esse ID");
+                }
+                break;
+            case 2:
+            case 3:
+            case 4:
+        }
+
+    }
+
+    private static int buscarDataId(int id, ArrayList<Data> calendario) {
+        for (Data data : calendario) {
+            if (data.getIdEvento() == id) {
+                return calendario.indexOf(data);
+            }
+        }
+        return -1;
+    }
+
+    private static void editarCalendario2(int index) {
+        int op;
+        boolean cancelar = false;
+        do {
+            exibirData(catalao.get(index));
+            menuEditarCalendario();
+            try {
+                op = leitor.nextInt();
+
+                switch (op) {
+                    case 1:
+                        deletarEvento(catalao.get(index), catalao);
+                        break;
+                    case 2:
+                        editarDataInicial(catalao.get(index), catalao);
+                        break;
+                    case 3:
+                        editarDataFinal(catalao.get(index), catalao);
+                        break;
+                    case 4:
+                        editarDescriacao(catalao.get(index), catalao);
+                        break;
+                    case 5:
+                        editarClassificacao(catalao.get(index), catalao);
+                        break;
+                    case 6:
+                        editarRegional(catalao.get(index), catalao);
+                        break;
+                    case 0:
+                        cancelar = true;
+                        break;
+                    default:
+                        System.out.println("Opcao invalida");
+                }
+            } catch (NumberFormatException nfe) {
+                System.out.println("Opcao invalida");
+                editarCalendario2(index);
+            }
+        } while (cancelar != true);
+
+    }
+
+    private static void menuEditarCalendario() {
+        System.out.println("\t Editar Calendario");
+        System.out.println("1 - Deletar Evento");
+        System.out.println("2 - Editar Data Inicial");
+        System.out.println("3 - Editar Data Final");
+        System.out.println("4 - Editar Descricao");
+        System.out.println("5 - Editar Classificacao");
+        System.out.println("6 - Editar Regional");
+        System.out.println("0 - Cancelar");
+    }
+
 }
