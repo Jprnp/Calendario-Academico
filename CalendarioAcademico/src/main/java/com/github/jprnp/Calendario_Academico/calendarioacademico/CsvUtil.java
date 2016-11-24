@@ -28,7 +28,7 @@ public class CsvUtil {
     static final String FILECATALAO = "catalao.csv";
     static final String FILEGOIANIA = "goiania.csv";
     static final String FILEGOIAS = "goias.csv";
-    static final String FILEJATAI ="jatai.csv";
+    static final String FILEJATAI = "jatai.csv";
     public static final String FILENAME = "calacaddata.csv";
     public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -94,31 +94,85 @@ public class CsvUtil {
      * @throws RuntimeException Caso ocorra erro na conversão das datas para
      * formato dd/MM/aaaa
      */
-    public static ArrayList<Data> loadCsv() throws RuntimeException {
+    public static ArrayList<Data> loadCsv(Regional reg) throws RuntimeException {
         ArrayList<Data> eventos = new ArrayList<Data>();
         String line;
         try {
-            Scanner csvFile = new Scanner(new File(FILENAME));
+            Scanner csvFile = null;
+            switch (reg.getRegionalNum()) {
+                case 1:
+                    csvFile = new Scanner(new File(FILECATALAO));
+                    break;
+                case 2:
+                    csvFile = new Scanner(new File(FILEGOIANIA));
+                    break;
+                case 3:
+                    csvFile = new Scanner(new File(FILEGOIAS));
+                    break;
+                case 4:
+                    csvFile = new Scanner(new File(FILEJATAI));
+                    break;
+            }
             csvFile.nextLine();
             while (csvFile.hasNextLine()) {
                 line = csvFile.nextLine();
-                String[] results = line.split(",");
+                String[] results = line.split(";");
                 int id = Integer.parseInt(results[0]);
                 try {
-                    Calendar dtIni = Calendar.getInstance();
+                    Calendar dtIni = (Calendar.getInstance());
                     dtIni.setTime(SDF.parse(results[1]));
                     Calendar dtFim = Calendar.getInstance();
                     dtFim.setTime(SDF.parse(results[2]));
-                    //eventos.add(new Data(id, dtIni, dtFim, results[3]));  <---- Adequar para a Classe nova
+                    String descricao = results[3];
+                    Regional regional = null;
+                    switch (Integer.parseInt(results[4])) {
+                        case 1:
+                            regional = Regional.CATALAO;
+                            break;
+                        case 2:
+                            regional = Regional.GOIANIA;
+                            break;
+                        case 3:
+                            regional = Regional.GOIAS;
+                            break;
+                        case 4:
+                            regional = Regional.JATAI;
+                            break;
+                        case 5:
+                            regional = Regional.TODAS;
+                            break;
+                    }
+
+                    Classificacao classificacao = null;
+                    switch (Integer.parseInt(results[4])) {
+                        case 1:
+                            classificacao = Classificacao.EVENTO;
+                            break;
+                        case 2:
+                            classificacao = Classificacao.FERIADO_NACIONAL;
+                            break;
+                        case 3:
+                            classificacao = Classificacao.FERIADO_MUNICIPAL;
+                            break;
+                        case 4:
+                            classificacao = Classificacao.PONTO_FACUTATIVO;
+                            break;
+                        case 5:
+                            classificacao = Classificacao.RECESSO_ACADEMICO;
+                            break;
+                    }
+
+                    eventos.add(new Data(dtIni, dtFim, descricao, regional,
+                            classificacao, id));
                 } catch (ParseException pe) {
                     throw new RuntimeException(pe.getMessage());
                 }
             }
-            eventos = sortCsv(eventos);
+
         } catch (FileNotFoundException ex) {
             throw new RuntimeException(ex.getMessage());
         }
-
+        eventos = sortCsv(eventos);
         return eventos;
     }
 
@@ -138,7 +192,7 @@ public class CsvUtil {
         return eventos;
     }
 
-    public static ArrayList<Data> addEvento(ArrayList<Data> eventos, Data data){
+    public static ArrayList<Data> addEvento(ArrayList<Data> eventos, Data data) {
         eventos.add(data);
         return eventos;
     }
@@ -146,7 +200,7 @@ public class CsvUtil {
     public static void generateCsv(ArrayList<Data> eventos) {
         String name = null;
         try {
-            switch(eventos.get(0).getRegional().getRegionalNum()){
+            switch (eventos.get(0).getRegional().getRegionalNum()) {
                 case 1:
                     name = FILECATALAO;
                     break;
@@ -173,7 +227,7 @@ public class CsvUtil {
                 writer.append(e.getDescricao());
                 writer.append(COMMA);
                 writer.append(String.valueOf(e.getClassificacao()
-                                             .getClassificacaoNum()));
+                        .getClassificacaoNum()));
                 writer.append(COMMA);
                 writer.append(String.valueOf(e.getRegional().getRegionalNum()));
             }
@@ -185,4 +239,5 @@ public class CsvUtil {
             throw new RuntimeException(ex.getMessage());
         }
     }
+
 }

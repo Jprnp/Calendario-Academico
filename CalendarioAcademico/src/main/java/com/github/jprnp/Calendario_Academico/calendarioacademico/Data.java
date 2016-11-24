@@ -28,6 +28,17 @@ public class Data {
       
   }
   
+   public Data(Calendar dataInicial, Calendar dataFinal, String descricao, 
+          Regional regional, Classificacao classificacao, int IdEvento) {
+      
+      this.dataInicial = dataInicial;
+      this.dataFinal = dataFinal;
+      this.descricao = descricao;
+      this.classificacao = classificacao;
+      this.regional = regional;
+      
+  }
+  
   public Data(Calendar data, String descricao, Regional regional, int idEvento,
           Classificacao classificacao) {
 
