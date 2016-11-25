@@ -176,8 +176,8 @@ public class App {
         Regional reg = selecionarRegional("Criar Evento");
         Classificacao classif = selecionarClassificacao();
         System.out.println("Data do Fim (DD/MM/AAAA):");
-        Calendar dtInic = null;
-        Calendar dtFim = null;
+        Calendar dtInic = Calendar.getInstance();
+        Calendar dtFim = Calendar.getInstance();
         String dt = readDateFormat();
         try {
             dtInic.setTime(CsvUtil.SDF.parse(dt));
@@ -416,7 +416,6 @@ public class App {
                         break;
                     case 4:
                         System.out.println("Entre com uma nova descricao ou nome:");
-                        leitor.nextLine();
                         String descricao = leitor.nextLine();
                         calendario = editarDescriacao(index, calendario, descricao);
                         break;
