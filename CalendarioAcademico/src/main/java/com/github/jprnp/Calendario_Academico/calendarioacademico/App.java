@@ -1,18 +1,22 @@
 package com.github.jprnp.Calendario_Academico.calendarioacademico;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
+
+import static com.github.jprnp.Calendario_Academico.calendarioacademico.CsvUtil.deletarEvento;
 
 public class App {
 
-    static Scanner leitor = new Scanner(System.in);
+    private static Scanner leitor = new Scanner(System.in);
 
-    static ArrayList<Data> catalao = new ArrayList<Data>();
-    static ArrayList<Data> goiania = new ArrayList<Data>();
-    static ArrayList<Data> goias = new ArrayList<Data>();
-    static ArrayList<Data> jatai = new ArrayList<Data>();
+    private static ArrayList<Data> catalao = new ArrayList<Data>();
+    private static ArrayList<Data> goiania = new ArrayList<Data>();
+    private static ArrayList<Data> goias = new ArrayList<Data>();
+    private static ArrayList<Data> jatai = new ArrayList<Data>();
 
     /**
      * Menu Principal do Programa
@@ -169,7 +173,7 @@ public class App {
     }
 
     private static void criarEvento() {
-        Regional reg = selecionarRegional();
+        Regional reg = selecionarRegional("Criar Evento");
         Classificacao classif = selecionarClassificacao();
         System.out.println("Data do Fim (DD/MM/AAAA):");
         Calendar dtInic = null;
@@ -252,9 +256,9 @@ public class App {
 
     }
 
-    private static Regional selecionarRegional() {
+    private static Regional selecionarRegional(String titulo) {
         int op;
-        menuSelecioneRegional("Criar Evento");
+        menuSelecioneRegional(titulo);
         op = leitor.nextInt();
         switch (op) {
             case 1:
@@ -269,7 +273,7 @@ public class App {
                 return Regional.TODAS;
             default:
                 System.out.println("Opcao invalida!");
-                return selecionarRegional();
+                return selecionarRegional(titulo);
         }
     }
 
@@ -327,6 +331,7 @@ public class App {
                 + "68|72|76|80|84|88|92|96)$)";
 
         boolean done = false;
+        leitor.nextLine();
         do {
             dt = leitor.nextLine();
             if (dt.matches(regex)) {
@@ -368,7 +373,7 @@ public class App {
             case 1:
                 int index = buscarDataId(id, catalao);
                 if (index != -1) {
-                    editarCalendario2(index);
+                    catalao = editarCalendario2(index, catalao);
                 } else {
                     System.out.println("Não encontramos Evento com esse ID");
                 }
@@ -389,33 +394,37 @@ public class App {
         return -1;
     }
 
-    private static void editarCalendario2(int index) {
+    private static ArrayList<Data> editarCalendario2(int index, ArrayList<Data> calendario) {
         int op;
         boolean cancelar = false;
         do {
-            exibirData(catalao.get(index));
-            menuEditarCalendario();
             try {
+                exibirData(catalao.get(index));
+                menuEditarCalendario();
+
                 op = leitor.nextInt();
 
                 switch (op) {
                     case 1:
-                        deletarEvento(catalao.get(index), catalao);
+                        calendario = CsvUtil.deletarEvento(calendario, calendario.get(index).getIdEvento());
                         break;
                     case 2:
-                        editarDataInicial(catalao.get(index), catalao);
+                        calendario = editarDataInicial(index, calendario);
                         break;
                     case 3:
-                        editarDataFinal(catalao.get(index), catalao);
+                        calendario = editarDataFinal(index, calendario);
                         break;
                     case 4:
-                        editarDescriacao(catalao.get(index), catalao);
+                        System.out.println("Entre com uma nova descricao ou nome:");
+                        leitor.nextLine();
+                        String descricao = leitor.nextLine();
+                        calendario = editarDescriacao(index, calendario, descricao);
                         break;
                     case 5:
-                        editarClassificacao(catalao.get(index), catalao);
+                        calendario = editarClassificacao(index, calendario, selecionarClassificacao().getClassificacaoNum());
                         break;
                     case 6:
-                        editarRegional(catalao.get(index), catalao);
+                        calendario = editarRegional(index, calendario);
                         break;
                     case 0:
                         cancelar = true;
@@ -425,10 +434,11 @@ public class App {
                 }
             } catch (NumberFormatException nfe) {
                 System.out.println("Opcao invalida");
-                editarCalendario2(index);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         } while (cancelar != true);
-
+        return calendario;
     }
 
     private static void menuEditarCalendario() {
@@ -441,5 +451,92 @@ public class App {
         System.out.println("6 - Editar Regional");
         System.out.println("0 - Cancelar");
     }
+
+    private static ArrayList<Data> editarRegional(int index, ArrayList<Data> calendario) {
+        Data data;
+        data = calendario.get(index);
+        switch (selecionarRegional("Editar Evento").getRegionalNum()) {
+            case 1:
+                calendario = deletarEvento(calendario, data.getIdEvento());
+                data.setRegional(Regional.CATALAO);
+                CsvUtil.addEvento(catalao, data);
+                break;
+            case 2:
+                calendario = deletarEvento(calendario, data.getIdEvento());
+                data.setRegional(Regional.GOIANIA);
+                CsvUtil.addEvento(goiania, data);
+                break;
+            case 3:
+                calendario = deletarEvento(calendario, data.getIdEvento());
+                data.setRegional(Regional.GOIAS);
+                CsvUtil.addEvento(goias, data);
+                break;
+            case 4:
+                calendario = deletarEvento(calendario, data.getIdEvento());
+                data.setRegional(Regional.JATAI);
+                CsvUtil.addEvento(jatai, data);
+                break;
+            case 5:
+                calendario = deletarEvento(calendario, data.getIdEvento());
+                data.setRegional(Regional.CATALAO);
+                CsvUtil.addEvento(catalao, data);
+                CsvUtil.addEvento(goiania, data);
+                CsvUtil.addEvento(goias, data);
+                CsvUtil.addEvento(jatai, data);
+                break;
+        }
+
+        return calendario;
+    }
+
+    private static ArrayList<Data> editarClassificacao(int index, ArrayList<Data> calendario, int cl) {
+        switch (cl) {
+            case 1:
+                calendario.get(index).setClassificacao(Classificacao.EVENTO);
+                return calendario;
+            case 2:
+                calendario.get(index).setClassificacao(Classificacao.FERIADO_NACIONAL);
+                return calendario;
+            case 3:
+                calendario.get(index).setClassificacao(Classificacao.FERIADO_MUNICIPAL);
+                return calendario;
+            case 4:
+                calendario.get(index).setClassificacao(Classificacao.PONTO_FACUTATIVO);
+                return calendario;
+            case 5:
+                calendario.get(index).setClassificacao(Classificacao.RECESSO_ACADEMICO);
+                return calendario;
+        }
+        return null;
+    }
+
+    private static ArrayList<Data> editarDescriacao(int index, ArrayList<Data> calendario, String descricao) {
+        calendario.get(index).setDescricao(descricao);
+        return calendario;
+    }
+
+    public static ArrayList<Data> editarDataInicial(int index, ArrayList<Data> calendario){
+        Calendar dt = null;
+        try {
+            dt.setTime(CsvUtil.SDF.parse(readDateFormat()));
+            calendario.get(index).setDataInicial(dt);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+        }
+        return calendario;
+    }
+
+    public static ArrayList<Data> editarDataFinal(int index, ArrayList<Data> calendario) throws ParseException {
+        Calendar dt = null;
+        try {
+            dt.setTime(CsvUtil.SDF.parse(readDateFormat()));
+            calendario.get(index).setDataFinal(dt);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+        }
+        return calendario;
+    }
+
+
 
 }
