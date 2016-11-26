@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Anotacao {
 
-    public static ArrayList<String> adicionaEvento(Data data, String coment) {
+    public static ArrayList<DataComent> adicionaEvento(Data data, String coment) {
 
         nomeDoArrayDataComent.setIdEvento(data.getIdEvento());
         nomeDoArrayDataComent.setDataInicial(data.getDataInicial());
@@ -16,7 +16,7 @@ public class Anotacao {
         return nomeDoArrayDataComent;
     }
 
-    public static ArrayList<String> removeEvento(int idEvento)
+    public static ArrayList<DataComent> removeEvento(int idEvento)
             throws RuntimeException{
         
         int contador = 0;
