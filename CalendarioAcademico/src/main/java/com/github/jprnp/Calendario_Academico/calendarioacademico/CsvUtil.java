@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class CsvUtil {
 
     static String filename;
-    static final String COMMA = ",";
+    static final String COMMA = ";";
     static final String NEWLINE = "\n";
     static final String HEADER = "idEvento,dataInicial,dataFinal,"
             + "descricao,classificacao,regional";
@@ -116,7 +116,7 @@ public class CsvUtil {
             csvFile.nextLine();
             while (csvFile.hasNextLine()) {
                 line = csvFile.nextLine();
-                String[] results = line.split(";");
+                String[] results = line.split(COMMA);
                 int id = Integer.parseInt(results[0]);
                 try {
                     Calendar dtIni = (Calendar.getInstance());

@@ -1,17 +1,15 @@
 package com.github.jprnp.Calendario_Academico.calendarioacademico;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.CsvUtil.deletarEvento;
 
 public class App {
 
-    private static Scanner leitor = new Scanner(System.in);
+    private static final Scanner leitor = new Scanner(System.in);
 
     private static ArrayList<Data> catalao = new ArrayList<Data>();
     private static ArrayList<Data> goiania = new ArrayList<Data>();
@@ -37,8 +35,10 @@ public class App {
                         break;
                     case 2:
                         criarEvento();
+                        break;
                     case 3:
                         editarCalendario();
+                        break;
                     case 4:
                         salvarCalendario();
                         break;
@@ -51,7 +51,6 @@ public class App {
             } while (sair == false);
         } catch (NumberFormatException nfe) {
             System.out.println(nfe.getMessage());
-            main(args);
         }
         System.out.println("Obrigado por usar nosso Software! :) ");
         System.exit(0);
@@ -175,17 +174,19 @@ public class App {
     private static void criarEvento() {
         Regional reg = selecionarRegional("Criar Evento");
         Classificacao classif = selecionarClassificacao();
-        System.out.println("Data do Fim (DD/MM/AAAA):");
         Calendar dtInic = Calendar.getInstance();
         Calendar dtFim = Calendar.getInstance();
+        System.out.println("Data do Evento (DD/MM/AAAA):");
         String dt = readDateFormat();
         try {
             dtInic.setTime(CsvUtil.SDF.parse(dt));
-
+            dt = "";
             if (classif == Classificacao.EVENTO) {
 
+                System.out.println("Data do Fim do evento(DD/MM/AAAA):");
                 dt = readDateFormat();
                 dtFim.setTime(CsvUtil.SDF.parse(dt));
+                dt = "";
 
             } else {
                 dtFim = dtInic;
@@ -196,20 +197,20 @@ public class App {
 
         System.out.println("Descricao ou nome do Evento:");
         String descr = leitor.nextLine();
-        int id;
+        int id, cod = reg.getRegionalNum();
         String idStr = null;
-        switch (reg.getRegionalNum()) {
+        switch (cod) {
             case 1:
-                idStr = (reg.getRegionalNum() + "" + catalao.size());
+                idStr = (cod + "" + catalao.size());
                 break;
             case 2:
-                idStr = (reg.getRegionalNum() + "" + goiania.size());
+                idStr = ("" + reg.getRegionalNum() + goiania.size());
                 break;
             case 3:
-                idStr = (reg.getRegionalNum() + "" + goias.size());
+                idStr = ("" + reg.getRegionalNum() + goias.size());
                 break;
             case 4:
-                idStr = (reg.getRegionalNum() + "" + jatai.size());
+                idStr = ("" + reg.getRegionalNum() + jatai.size());
                 break;
         }
         id = Integer.parseInt(idStr);
@@ -248,8 +249,9 @@ public class App {
                         break;
                     case 2:
                         sair = true;
+                        break;
                 }
-            } while (sair == true);
+            } while (sair != true);
         } catch (NumberFormatException nfe) {
             System.out.println("Comando invalido");
         }
@@ -331,7 +333,6 @@ public class App {
                 + "68|72|76|80|84|88|92|96)$)";
 
         boolean done = false;
-        leitor.nextLine();
         do {
             dt = leitor.nextLine();
             if (dt.matches(regex)) {
@@ -514,7 +515,7 @@ public class App {
         return calendario;
     }
 
-    public static ArrayList<Data> editarDataInicial(int index, ArrayList<Data> calendario){
+    public static ArrayList<Data> editarDataInicial(int index, ArrayList<Data> calendario) {
         Calendar dt = null;
         try {
             dt.setTime(CsvUtil.SDF.parse(readDateFormat()));
@@ -535,7 +536,5 @@ public class App {
         }
         return calendario;
     }
-
-
 
 }
