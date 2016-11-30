@@ -1,38 +1,47 @@
-package anotacao;
+package com.github.jprnp.Calendario_Academico.calendarioacademico;
 
 import java.util.ArrayList;
 
 public class Anotacao {
 
-    public static ArrayList<DataComent> adicionaEvento(Data data, String coment) {
+    private ArrayList<DataComent> arrayDataComent = new ArrayList();
+    
+    public static void adicionaEvento(Data data, String coment)
+            throws RuntimeException {
 
-        nomeDoArrayDataComent.setIdEvento(data.getIdEvento());
-        nomeDoArrayDataComent.setDataInicial(data.getDataInicial());
-        nomeDoArrayDataComent.setDataFinal(data.getDataFinal());
-        nomeDoArrayDataComent.setDescricao(data.getDescricao());
-        nomeDoArrayDataComent.setClassificacao(data.getClassificacao());
-        nomeDoArrayDataComent.setRegional(data.getRegional());
-        
-        return nomeDoArrayDataComent;
+        try {
+        DataComent dataComent = new DataComent(data.getDataInicial(),
+                data.getDataFinal(), data.getDescricao(), data.getRegional(),
+                data.getIdEvento(), coment);
+            
+        } catch (RuntimeException ex) {
+            throw new RuntimeException("Ocorreu um erro ao tentar criar" +
+                                      + " um objeto DataComent.");
+        }
+
+        this.arrayDataComent.add(dataComent);
     }
 
-    public static ArrayList<DataComent> removeEvento(int idEvento)
-            throws RuntimeException{
+    public static void removeEvento(int idEvento)
+            throws RuntimeException {
         
         int contador = 0;
         
-        for (DataComent dc : nomeDoArrayDataComent) {
+        for (DataComent dc : arrayDataComent) {
             if (dc.getIdEvento() == idEvento) {
-                nomeDoArrayDataComent.remove(dc);
+                arrayDataComent.remove(dc);
             } else {
                 contador = contador + 1;
             }
         }
         
-        if (contador == nomeDoArrayDataComent.size()) {
+        if (contador == arrayDataComent.size()) {
             throw new RuntimeException("Evento não encontrado.");
         }
-        
-        return nomeDoArrayDataComent;
+
+    }
+    
+    public static ArrayList<DataComent> getArrayDataComent() {
+        return this.arrayDataComent;
     }
 }
