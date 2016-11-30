@@ -14,12 +14,12 @@ public class Anotacao {
                 data.getDataFinal(), data.getDescricao(), data.getRegional(),
                 data.getIdEvento(), coment);
             
+            arrayDataComent.add(dataComent);
         } catch (RuntimeException ex) {
             throw new RuntimeException("Ocorreu um erro ao tentar criar" +
-                                      + " um objeto DataComent.");
+                                      " um objeto DataComent.");
         }
 
-        this.arrayDataComent.add(dataComent);
     }
 
     public static void removeEvento(int idEvento)
