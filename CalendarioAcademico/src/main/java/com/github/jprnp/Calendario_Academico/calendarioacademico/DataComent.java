@@ -5,10 +5,32 @@
  */
 package com.github.jprnp.Calendario_Academico.calendarioacademico;
 
+import java.util.Calendar;
+
 /**
  *
  * @author Estevao
  */
-public class DataComent {
+public class DataComent extends Data {
+    
+    private String comentario;
+    
+    public DataComent(Calendar dataInicial, Calendar dataFinal, 
+            String descricao, Regional regional, int IdEvento,
+            String comentario) {
+        super(dataInicial, dataFinal, descricao, regional, IdEvento);
+        
+        this.comentario = comentario;
+        
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
+    
     
 }

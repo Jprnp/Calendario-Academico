@@ -9,7 +9,7 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.CsvUtil.
 
 public class App {
 
-    private static final Scanner leitor = new Scanner(System.in);
+    private static Scanner leitor = new Scanner(System.in);
 
     private static ArrayList<Data> catalao = new ArrayList<Data>();
     private static ArrayList<Data> goiania = new ArrayList<Data>();
@@ -536,5 +536,5 @@ public class App {
         }
         return calendario;
     }
-
+    
 }
