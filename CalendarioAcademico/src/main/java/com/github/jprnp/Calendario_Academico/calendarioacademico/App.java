@@ -9,12 +9,12 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.CsvUtil.
 
 public class App {
 
-    private static Scanner leitor = new Scanner(System.in);
+    static Scanner leitor = new Scanner(System.in);
 
-    private static ArrayList<Data> catalao = new ArrayList<Data>();
-    private static ArrayList<Data> goiania = new ArrayList<Data>();
-    private static ArrayList<Data> goias = new ArrayList<Data>();
-    private static ArrayList<Data> jatai = new ArrayList<Data>();
+    static ArrayList<Data> catalao = new ArrayList<Data>();
+    static ArrayList<Data> goiania = new ArrayList<Data>();
+    static ArrayList<Data> goias = new ArrayList<Data>();
+    static ArrayList<Data> jatai = new ArrayList<Data>();
 
     /**
      * Menu Principal do Programa
@@ -49,11 +49,14 @@ public class App {
                         System.out.println("Opcao Invalida!");
                 }
             } while (sair == false);
+            
+             System.exit(op);
+             
         } catch (NumberFormatException nfe) {
             System.out.println(nfe.getMessage());
         }
         System.out.println("Obrigado por usar nosso Software! :) ");
-        System.exit(0);
+       
     }
 
     public static void mainMenu() {

@@ -42,6 +42,6 @@ public class Anotacao {
     }
     
     public static ArrayList<DataComent> getArrayDataComent() {
-        return this.arrayDataComent;
+        return arrayDataComent;
     }
 }
