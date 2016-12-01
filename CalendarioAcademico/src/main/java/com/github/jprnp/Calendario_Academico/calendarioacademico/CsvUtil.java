@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class CsvUtil {
 
     static String filename;
-    static final String COMMA = ",";
+    static final String COMMA = ";";
     static final String NEWLINE = "\n";
     static final String HEADER = "idEvento,dataInicial,dataFinal,"
             + "descricao,classificacao,regional";
@@ -116,7 +116,7 @@ public class CsvUtil {
             csvFile.nextLine();
             while (csvFile.hasNextLine()) {
                 line = csvFile.nextLine();
-                String[] results = line.split(";");
+                String[] results = line.split(COMMA);
                 int id = Integer.parseInt(results[0]);
                 try {
                     Calendar dtIni = (Calendar.getInstance());
@@ -125,7 +125,7 @@ public class CsvUtil {
                     dtFim.setTime(SDF.parse(results[2]));
                     String descricao = results[3];
                     Regional regional = null;
-                    switch (Integer.parseInt(results[4])) {
+                    switch (Integer.parseInt(results[5])) {
                         case 1:
                             regional = Regional.CATALAO;
                             break;
@@ -145,19 +145,19 @@ public class CsvUtil {
 
                     Classificacao classificacao = null;
                     switch (Integer.parseInt(results[4])) {
-                        case 1:
+                        case 5:
                             classificacao = Classificacao.EVENTO;
                             break;
-                        case 2:
+                        case 1:
                             classificacao = Classificacao.FERIADO_NACIONAL;
                             break;
-                        case 3:
+                        case 2:
                             classificacao = Classificacao.FERIADO_MUNICIPAL;
                             break;
-                        case 4:
+                        case 3:
                             classificacao = Classificacao.PONTO_FACUTATIVO;
                             break;
-                        case 5:
+                        case 4:
                             classificacao = Classificacao.RECESSO_ACADEMICO;
                             break;
                     }
@@ -212,9 +212,10 @@ public class CsvUtil {
                     break;
                 case 4:
                     name = FILEJATAI;
-                    break;
+                    break;            
             }
             FileWriter writer = new FileWriter(new File(name), false);
+            
             writer.append(HEADER);
             for (Data e : eventos) {
                 writer.append(NEWLINE);
