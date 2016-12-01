@@ -33,7 +33,7 @@ public class App {
 			}
 			do {
 				mainMenu();
-				op = leitor.nextInt();
+				op = readInteger();
 				switch (op) {
 				case 1:
 					exibirCalendario();
@@ -51,7 +51,7 @@ public class App {
 					sair = true;
 					break;
 				default:
-					System.out.println("Opcao Invalida!");
+					System.out.println("Opcao Invalida!\n");
 				}
 			} while (sair == false);
 
@@ -80,8 +80,8 @@ public class App {
 		do {
 			try {
 
-				menuSelecioneRegional("Exibir Calendario");
-				op = leitor.nextInt();
+				menuSelecioneRegional("Exibir Calendario\n");
+				op = readInteger();
 				switch (op) {
 				case 1:
 				case 2:
@@ -93,7 +93,7 @@ public class App {
 					volta = true;
 					break;
 				default:
-					System.out.println("Opcao invalida");
+					System.out.println("Opcao invalida\n");
 				}
 			} catch (NumberFormatException nfe) {
 				System.out.println(nfe.getMessage());
@@ -123,7 +123,7 @@ public class App {
 					exibirData(data);
 				}
 			} else {
-				System.out.println("Calendario Vazio");
+				System.out.println("Calendario Vazio\n");
 			}
 			System.out.println("");
 			break;
@@ -133,7 +133,7 @@ public class App {
 					exibirData(data);
 				}
 			} else {
-				System.out.println("Calendario Vazio");
+				System.out.println("Calendario Vazio\n");
 			}
 			System.out.println("");
 			break;
@@ -143,7 +143,7 @@ public class App {
 					exibirData(data);
 				}
 			} else {
-				System.out.println("Calendario Vazio");
+				System.out.println("Calendario Vazio\n");
 			}
 			System.out.println("");
 			break;
@@ -153,12 +153,12 @@ public class App {
 					exibirData(data);
 				}
 			} else {
-				System.out.println("Calendario Vazio");
+				System.out.println("Calendario Vazio\n");
 			}
 			System.out.println("");
 			break;
 		default:
-			throw new Exception("Codigo invalido! Tente Novamente:");
+			throw new Exception("Codigo invalido! Tente Novamente:\n");
 		}
 	}
 
@@ -229,7 +229,7 @@ public class App {
 				System.out.println("O que deseja fazer?");
 				System.out.println(" 1 - Iserir o evento criado");
 				System.out.println(" 2 - Descarta o evento criado");
-				switch (leitor.nextInt()) {
+				switch (readInteger()) {
 				case 1:
 					switch (reg.getRegionalNum()) {
 					case 1:
@@ -258,7 +258,7 @@ public class App {
 				}
 			} while (sair != true);
 		} catch (NumberFormatException nfe) {
-			System.out.println("Comando invalido");
+			System.out.println("Comando invalido\n");
 		}
 
 	}
@@ -266,7 +266,7 @@ public class App {
 	private static Regional selecionarRegional(String titulo) {
 		int op;
 		menuSelecioneRegional(titulo);
-		op = leitor.nextInt();
+		op = readInteger();
 		switch (op) {
 		case 1:
 			return Regional.CATALAO;
@@ -279,7 +279,7 @@ public class App {
 		case 5:
 			return Regional.TODAS;
 		default:
-			System.out.println("Opcao invalida!");
+			System.out.println("Opcao invalida!\n");
 			return selecionarRegional(titulo);
 		}
 	}
@@ -288,7 +288,7 @@ public class App {
 		int op;
 		menuSelecioneClassificacao("Criar Evento");
 		try {
-			op = leitor.nextInt();
+			op = readInteger();
 		} catch (NumberFormatException nfe) {
 			System.out.println("Codigo invalido");
 			return selecionarClassificacao();
@@ -305,7 +305,7 @@ public class App {
 		case 5:
 			return Classificacao.RECESSO_ACADEMICO;
 		default:
-			System.out.println("Opcao invalida!");
+			System.out.println("Opcao invalida!\n");
 			return selecionarClassificacao();
 		}
 	}
@@ -388,7 +388,7 @@ public class App {
 		String idStr;
 		System.out.println("\t Editar Calendario");
 		System.out.println("entre com o Id do evento:");
-		id = leitor.nextInt();
+		id = readInteger();
 		idStr = "" + id;
 		codReg = Integer.parseInt(idStr.substring(0, 1));
 		switch (codReg) {
@@ -425,7 +425,7 @@ public class App {
 				exibirData(catalao.get(index));
 				menuEditarCalendario();
 
-				op = leitor.nextInt();
+				op = readInteger();
 
 				switch (op) {
 				case 1:
@@ -453,10 +453,10 @@ public class App {
 					cancelar = true;
 					break;
 				default:
-					System.out.println("Opcao invalida");
+					System.out.println("Opcao invalida\n");
 				}
 			} catch (NumberFormatException nfe) {
-				System.out.println("Opcao invalida");
+				System.out.println("Opcao invalida\n");
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -559,5 +559,18 @@ public class App {
 		}
 		return calendario;
 	}
+	
+	/**
+     * Função que força o usuário a digitar um inteiro válido.
+     * @return inteiro digitado
+     */
+    public static int readInteger() {
+        try {
+          return Integer.parseInt(leitor.nextLine());
+        } catch (NumberFormatException e) {
+          System.out.println("\nFormato Invalido!");
+          return -1;
+        }
+    }
 
 }
