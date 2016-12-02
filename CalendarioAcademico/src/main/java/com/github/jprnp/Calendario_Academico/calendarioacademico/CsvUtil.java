@@ -42,23 +42,13 @@ public class CsvUtil {
      * @return Lista após a exclusão do evento
      * @throws RuntimeException Caso o evento não seja encontrado
      */
-    public static ArrayList<Data> deletarEvento(ArrayList<Data> lista, int idEvento)
+    public static ArrayList<Data> deletarEvento(ArrayList<Data> lista, int index)
             throws RuntimeException {
 
-        int contador = 0;
-
-        for (Data d : lista) {
-
-            if (d.getIdEvento() == idEvento) {
-                lista.remove(contador);
-                break;
-            } else {
-                contador++;
-            }
-        }
-
-        if (contador == lista.size()) {
-            throw new RuntimeException("Evento não encontrado.");
+        if (index < lista.size()) {
+            lista.remove(index);
+        } else {
+        	throw new RuntimeException("Evento não encontrado.");
         }
 
         return lista;
@@ -240,5 +230,47 @@ public class CsvUtil {
             throw new RuntimeException(ex.getMessage());
         }
     }
-
+    
+    public static void generateEmptyCsv(ArrayList<Data> eventos, int regId) {
+        String name = null;
+        switch(regId) {
+        case 1:
+        	name = FILECATALAO;
+            break;
+        case 2:
+        	name = FILEGOIANIA;
+            break;
+        case 3:
+        	name = FILEGOIAS;
+            break;
+        case 4:
+        	name = FILEJATAI;
+            break;  
+        }
+        try {
+            FileWriter writer = new FileWriter(new File(name), false);
+            writer.append(HEADER);
+            writer.flush();
+            writer.close();
+            //System.out.println("Dados armazenados com sucesso!");
+        } catch (IOException ex) {
+            //System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    
+    public static int generateNewId(ArrayList<Data> eventos) {
+    	int maiorId = 0;
+    	
+    	if(!eventos.isEmpty()) {
+    		for(Data dt : eventos) {
+    			if (dt.getIdEvento() > maiorId) {
+    				maiorId = dt.getIdEvento();
+    			}
+    		}
+    		return maiorId + 1;
+    	} else {
+    		return 1;
+    	}
+    }
 }

@@ -18,24 +18,26 @@ public class Data {
   *
   */
   public Data(Calendar dataInicial, Calendar dataFinal, String descricao, 
-          Regional regional, int IdEvento) {
+          Regional regional, int idEvento) {
       
       this.dataInicial = dataInicial;
       this.dataFinal = dataFinal;
       this.descricao = descricao;
       classificacao = Classificacao.EVENTO;
       this.regional = regional;
+      this.idEvento = idEvento;
       
   }
   
    public Data(Calendar dataInicial, Calendar dataFinal, String descricao, 
-          Regional regional, Classificacao classificacao, int IdEvento) {
+          Regional regional, Classificacao classificacao, int idEvento) {
       
       this.dataInicial = dataInicial;
       this.dataFinal = dataFinal;
       this.descricao = descricao;
       this.classificacao = classificacao;
       this.regional = regional;
+      this.idEvento = idEvento;
       
   }
   
@@ -64,7 +66,7 @@ public class Data {
   }
   
   public void setDataInicial(Calendar data) {
-      this.dataFinal = data;
+      this.dataInicial = data;
   }
   
   

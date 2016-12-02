@@ -1,5 +1,6 @@
 package com.github.jprnp.Calendario_Academico.calendarioacademico;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class App {
 	static ArrayList<Data> goiania = new ArrayList<Data>();
 	static ArrayList<Data> goias = new ArrayList<Data>();
 	static ArrayList<Data> jatai = new ArrayList<Data>();
+	static String[] argss;
+	static boolean loaded = true;
 
 	/**
 	 * Menu Principal do Programa
@@ -23,11 +26,15 @@ public class App {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		argss = args;
 		int op;
 		boolean sair = false;
 		try {
 			try {
-				carregarCalendarios();
+				if (loaded) {
+					carregarCalendarios();
+					loaded = false;
+				}
 			} catch (FileNotFoundException e) {
 
 			}
@@ -77,8 +84,8 @@ public class App {
 		int op;
 		boolean volta = false;
 
-		do {
-			try {
+		try {
+			do {
 
 				menuSelecioneRegional("Exibir Calendario\n");
 				op = readInteger();
@@ -95,13 +102,13 @@ public class App {
 				default:
 					System.out.println("Opcao invalida\n");
 				}
-			} catch (NumberFormatException nfe) {
-				System.out.println(nfe.getMessage());
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
 
-		} while (volta != true);
+			} while (volta != true);
+		} catch (NumberFormatException nfe) {
+			System.out.println(nfe.getMessage());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 
 	}
 
@@ -178,7 +185,7 @@ public class App {
 
 	private static void criarEvento() {
 		Regional reg = selecionarRegional("Criar Evento");
-		Classificacao classif = selecionarClassificacao();
+		Classificacao classif = selecionarClassificacao("Criar Evento");
 		Calendar dtInic = Calendar.getInstance();
 		Calendar dtFim = Calendar.getInstance();
 		System.out.println("Data do Evento (DD/MM/AAAA):");
@@ -202,23 +209,23 @@ public class App {
 
 		System.out.println("Descricao ou nome do Evento:");
 		String descr = leitor.nextLine();
-		int id, cod = reg.getRegionalNum();
-		String idStr = null;
+		int id = 1, cod = reg.getRegionalNum();
 		switch (cod) {
 		case 1:
-			idStr = (cod + "" + catalao.size());
+			id = CsvUtil.generateNewId(catalao);
 			break;
 		case 2:
-			idStr = ("" + reg.getRegionalNum() + goiania.size());
+			id = CsvUtil.generateNewId(goiania);
 			break;
 		case 3:
-			idStr = ("" + reg.getRegionalNum() + goias.size());
+			id = CsvUtil.generateNewId(goias);
 			break;
 		case 4:
-			idStr = ("" + reg.getRegionalNum() + jatai.size());
+			id = CsvUtil.generateNewId(jatai);
 			break;
+		default:
+			id = -1;
 		}
-		id = Integer.parseInt(idStr);
 		Data data = new Data(dtInic, dtFim, descr, reg, classif, id);
 		System.out.println("\nData criada com sucesso!");
 		System.out.println("-------------------------------------------------");
@@ -265,6 +272,7 @@ public class App {
 
 	private static Regional selecionarRegional(String titulo) {
 		int op;
+
 		menuSelecioneRegional(titulo);
 		op = readInteger();
 		switch (op) {
@@ -278,35 +286,39 @@ public class App {
 			return Regional.JATAI;
 		case 5:
 			return Regional.TODAS;
+		case 0:
+			main(argss);
+			break;
 		default:
 			System.out.println("Opcao invalida!\n");
 			return selecionarRegional(titulo);
 		}
+		return null;
 	}
 
-	private static Classificacao selecionarClassificacao() {
+	private static Classificacao selecionarClassificacao(String frase) {
 		int op;
-		menuSelecioneClassificacao("Criar Evento");
+		menuSelecioneClassificacao(frase);
 		try {
 			op = readInteger();
 		} catch (NumberFormatException nfe) {
 			System.out.println("Codigo invalido");
-			return selecionarClassificacao();
+			return selecionarClassificacao(frase);
 		}
 		switch (op) {
-		case 1:
-			return Classificacao.EVENTO;
-		case 2:
-			return Classificacao.FERIADO_NACIONAL;
-		case 3:
-			return Classificacao.FERIADO_MUNICIPAL;
-		case 4:
-			return Classificacao.PONTO_FACUTATIVO;
 		case 5:
+			return Classificacao.EVENTO;
+		case 1:
+			return Classificacao.FERIADO_NACIONAL;
+		case 2:
+			return Classificacao.FERIADO_MUNICIPAL;
+		case 3:
+			return Classificacao.PONTO_FACUTATIVO;
+		case 4:
 			return Classificacao.RECESSO_ACADEMICO;
 		default:
 			System.out.println("Opcao invalida!\n");
-			return selecionarClassificacao();
+			return selecionarClassificacao(frase);
 		}
 	}
 
@@ -369,42 +381,100 @@ public class App {
 	}
 
 	private static void salvarCalendario() {
-		if (!catalao.isEmpty()) {
-			CsvUtil.generateCsv(catalao);
-		}
-		if (!goiania.isEmpty()) {
-			CsvUtil.generateCsv(goiania);
-		}
-		if (!goias.isEmpty()) {
-			CsvUtil.generateCsv(goias);
-		}
-		if (!jatai.isEmpty()) {
-			CsvUtil.generateCsv(jatai);
+		try {
+			if (!catalao.isEmpty()) {
+				CsvUtil.generateCsv(catalao);
+			} else {
+				CsvUtil.generateEmptyCsv(catalao, Regional.CATALAO.getRegionalNum());
+			}
+			if (!goiania.isEmpty()) {
+				CsvUtil.generateCsv(goiania);
+			} else {
+				CsvUtil.generateEmptyCsv(goiania, Regional.GOIANIA.getRegionalNum());
+			}
+			if (!goias.isEmpty()) {
+				CsvUtil.generateCsv(goias);
+			} else {
+				CsvUtil.generateEmptyCsv(goias, Regional.GOIAS.getRegionalNum());
+			}
+			if (!jatai.isEmpty()) {
+				CsvUtil.generateCsv(jatai);
+			} else {
+				CsvUtil.generateEmptyCsv(jatai, Regional.JATAI.getRegionalNum());
+			}
+			System.out.println("Salvado com Sucesso!");
+		} catch (RuntimeException re) {
+			System.out.println(re.getMessage());
 		}
 	}
 
 	private static void editarCalendario() {
-		int id, codReg, indexCalen;
-		String idStr;
-		System.out.println("\t Editar Calendario");
-		System.out.println("entre com o Id do evento:");
-		id = readInteger();
-		idStr = "" + id;
-		codReg = Integer.parseInt(idStr.substring(0, 1));
-		switch (codReg) {
-		case 5:
-		case 1:
-			int index = buscarDataId(id, catalao);
-			if (index != -1) {
-				catalao = editarCalendario2(index, catalao);
-			} else {
-				System.out.println("Não encontramos Evento com esse ID");
+		int id, codReg, index;
+		boolean voltar = false;
+		do {
+		codReg = selecionarRegional("Editar Calendario").getRegionalNum();		
+			System.out.println("Digite o Id do Evento:\n");
+			id = readInteger();
+			switch (codReg) {
+			case 5:
+				index = buscarDataId(id, catalao);
+				if (index != -1) {
+					catalao = editarCalendario2(index, catalao);
+				} else {
+					System.out.println("Não encontramos Evento com esse ID");
+				}
+				if (index != -1) {
+					goiania = editarCalendario2(index, goiania);
+				} else {
+					System.out.println("Não encontramos Evento com esse ID");
+				}
+				if (index != -1) {
+					goias = editarCalendario2(index, goias);
+				} else {
+					System.out.println("Não encontramos Evento com esse ID");
+				}
+				if (index != -1) {
+					jatai = editarCalendario2(index, jatai);
+				} else {
+					System.out.println("Não encontramos Evento com esse ID");
+				}
+			case 1:
+				index = buscarDataId(id, catalao);
+				if (index != -1) {
+					catalao = editarCalendario2(index, catalao);
+				} else {
+					System.out.println("Não encontramos Evento com esse ID");
+				}
+				break;
+			case 2:
+				index = buscarDataId(id, goiania);
+				if (index != -1) {
+					goiania = editarCalendario2(index, goiania);
+				} else {
+					System.out.println("Não encontramos Evento com esse ID");
+				}
+				break;
+			case 3:
+				index = buscarDataId(id, goias);
+				if (index != -1) {
+					goias = editarCalendario2(index, goias);
+				} else {
+					System.out.println("Não encontramos Evento com esse ID");
+				}
+				break;
+			case 4:
+				index = buscarDataId(id, jatai);
+				if (index != -1) {
+					jatai = editarCalendario2(index, jatai);
+				} else {
+					System.out.println("Não encontramos Evento com esse ID");
+				}
+				break;
+			case 0:
+				voltar = true;
+				break;
 			}
-			break;
-		case 2:
-		case 3:
-		case 4:
-		}
+		} while (voltar != true);
 
 	}
 
@@ -422,19 +492,30 @@ public class App {
 		boolean cancelar = false;
 		do {
 			try {
-				exibirData(catalao.get(index));
+				try {
+					exibirData(calendario.get(index));
+				} catch (RuntimeException re) {
+					editarCalendario();
+				}
 				menuEditarCalendario();
 
 				op = readInteger();
 
 				switch (op) {
 				case 1:
-					calendario = CsvUtil.deletarEvento(calendario, calendario.get(index).getIdEvento());
+					try {
+						calendario = CsvUtil.deletarEvento(calendario, index);
+						System.out.println("Evento deletado com Sucesso!");
+					} catch (RuntimeException re) {
+						System.out.println(re.getMessage());
+					}
 					break;
 				case 2:
+					System.out.println("Entre com a Data Inicial");
 					calendario = editarDataInicial(index, calendario);
 					break;
 				case 3:
+					System.out.println("Entre com a Data Final");
 					calendario = editarDataFinal(index, calendario);
 					break;
 				case 4:
@@ -444,10 +525,7 @@ public class App {
 					break;
 				case 5:
 					calendario = editarClassificacao(index, calendario,
-							selecionarClassificacao().getClassificacaoNum());
-					break;
-				case 6:
-					calendario = editarRegional(index, calendario);
+							selecionarClassificacao("Editar Evento").getClassificacaoNum());
 					break;
 				case 0:
 					cancelar = true;
@@ -471,7 +549,6 @@ public class App {
 		System.out.println("3 - Editar Data Final");
 		System.out.println("4 - Editar Descricao");
 		System.out.println("5 - Editar Classificacao");
-		System.out.println("6 - Editar Regional");
 		System.out.println("0 - Cancelar");
 	}
 
@@ -539,7 +616,7 @@ public class App {
 	}
 
 	public static ArrayList<Data> editarDataInicial(int index, ArrayList<Data> calendario) {
-		Calendar dt = null;
+		Calendar dt = Calendar.getInstance();
 		try {
 			dt.setTime(CsvUtil.SDF.parse(readDateFormat()));
 			calendario.get(index).setDataInicial(dt);
@@ -550,7 +627,7 @@ public class App {
 	}
 
 	public static ArrayList<Data> editarDataFinal(int index, ArrayList<Data> calendario) throws ParseException {
-		Calendar dt = null;
+		Calendar dt = Calendar.getInstance();
 		try {
 			dt.setTime(CsvUtil.SDF.parse(readDateFormat()));
 			calendario.get(index).setDataFinal(dt);
@@ -559,18 +636,19 @@ public class App {
 		}
 		return calendario;
 	}
-	
+
 	/**
-     * Função que força o usuário a digitar um inteiro válido.
-     * @return inteiro digitado
-     */
-    public static int readInteger() {
-        try {
-          return Integer.parseInt(leitor.nextLine());
-        } catch (NumberFormatException e) {
-          System.out.println("\nFormato Invalido!");
-          return -1;
-        }
-    }
+	 * Função que força o usuário a digitar um inteiro válido.
+	 * 
+	 * @return inteiro digitado
+	 */
+	public static int readInteger() {
+		try {
+			return Integer.parseInt(leitor.nextLine());
+		} catch (NumberFormatException e) {
+			System.out.println("\nFormato Invalido!");
+			return -1;
+		}
+	}
 
 }

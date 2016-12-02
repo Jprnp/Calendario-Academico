@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Anotacao {
 
-    /*private static ArrayList<DataComent> arrayDataComent = new ArrayList();
+    private static ArrayList<DataComent> arrayDataComent = new ArrayList();
     
     public static void adicionaEvento(Data data, String coment)
             throws RuntimeException {
@@ -43,5 +43,5 @@ public class Anotacao {
     
     public static ArrayList<DataComent> getArrayDataComent() {
         return arrayDataComent;
-    }*/
+    }
 }
