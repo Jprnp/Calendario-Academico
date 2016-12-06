@@ -14,8 +14,8 @@ public class Anotacao {
 
         try {
         DataComent dataComent = new DataComent(data.getDataInicial(),
-                data.getDataFinal(), data.getDescricao(), data.getRegional(),
-                data.getIdEvento(), coment);
+                data.getDataFinal(), data.getTitulo(), data.getDescricao(), 
+                data.getRegional(), data.getIdEvento(), coment);
             
             arrayDataComent.add(dataComent);
         } catch (RuntimeException ex) {

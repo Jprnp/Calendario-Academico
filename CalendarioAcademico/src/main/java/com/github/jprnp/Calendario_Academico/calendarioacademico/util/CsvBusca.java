@@ -21,14 +21,26 @@ public class CsvBusca {
         return resultadobusca;
     }
     
-    public static Data buscaDescricao (ArrayList<Data> eventos, 
+    public static ArrayList<Data> buscaDescricao (ArrayList<Data> eventos, 
                                        String descricaodigitada){
-        Data resultadobusca = null;
+        ArrayList<Data> resultadobusca = new ArrayList<Data>();
         int cont;
         for(cont = 0; cont < eventos.size(); cont++){
             if(eventos.get(cont).getDescricao()
                     .matches("(?i).*"+descricaodigitada+".*"))
-                resultadobusca = eventos.get(cont);       
+                resultadobusca.add(eventos.get(cont));       
+        }
+        return resultadobusca;
+    }
+    
+    public static ArrayList<Data> buscaTitulo (ArrayList<Data> eventos, 
+                                       String titulodigitado){
+        ArrayList<Data> resultadobusca = new ArrayList<Data>();
+        int cont;
+        for(cont = 0; cont < eventos.size(); cont++){
+            if(eventos.get(cont).getTitulo()
+                    .matches("(?i).*"+titulodigitado+".*"))
+                resultadobusca.add(eventos.get(cont));       
         }
         return resultadobusca;
     }
