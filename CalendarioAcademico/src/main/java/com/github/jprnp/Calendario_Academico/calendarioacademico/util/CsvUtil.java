@@ -219,6 +219,8 @@ public class CsvUtil {
                 writer.append(COMMA);
                 writer.append(SDF.format(e.getDataFinal().getTime()));
                 writer.append(COMMA);
+                writer.append(e.getTitulo());
+                writer.append(COMMA);
                 writer.append(e.getDescricao());
                 writer.append(COMMA);
                 writer.append(String.valueOf(e.getClassificacao()

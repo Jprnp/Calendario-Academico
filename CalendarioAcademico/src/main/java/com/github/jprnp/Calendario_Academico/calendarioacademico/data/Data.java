@@ -10,6 +10,7 @@ public class Data {
   private int idEvento;
   private Calendar dataInicial;
   private Calendar dataFinal;
+  private String titulo;
   private String descricao;
   private Classificacao classificacao;
   private Regional regional;
@@ -17,23 +18,26 @@ public class Data {
   /*
   *
   */
-  public Data(Calendar dataInicial, Calendar dataFinal, String descricao, 
-          Regional regional, int idEvento) {
+  public Data(Calendar dataInicial, Calendar dataFinal, String titulo, 
+          String descricao, Regional regional, int idEvento) {
       
       this.dataInicial = dataInicial;
       this.dataFinal = dataFinal;
+      this.titulo = titulo;
       this.descricao = descricao;
       classificacao = Classificacao.EVENTO;
       this.regional = regional;
-      this.idEvento = idEvento;
+      this.idEvento = idEvento; 
       
   }
   
-   public Data(Calendar dataInicial, Calendar dataFinal, String descricao, 
-          Regional regional, Classificacao classificacao, int idEvento) {
+   public Data(Calendar dataInicial, Calendar dataFinal, String titulo,
+           String descricao, Regional regional, Classificacao classificacao, 
+           int idEvento) {
       
       this.dataInicial = dataInicial;
       this.dataFinal = dataFinal;
+      this.titulo = titulo;
       this.descricao = descricao;
       this.classificacao = classificacao;
       this.regional = regional;
@@ -41,11 +45,12 @@ public class Data {
       
   }
   
-  public Data(Calendar data, String descricao, Regional regional, int idEvento,
-          Classificacao classificacao) {
+  public Data(Calendar data, String titulo, String descricao, Regional regional,
+          int idEvento, Classificacao classificacao) {
 
       this.dataInicial = data;
       this.dataFinal = null;
+      this.titulo = titulo;
       this.descricao = descricao;
       this.classificacao = classificacao;
       this.regional = regional;
@@ -76,6 +81,14 @@ public class Data {
   
   public void setDataFinal(Calendar data) {
       this.dataFinal = data;
+  }
+  
+  public String getTitulo(){
+      return titulo;
+  }
+  
+  public void setTitulo(String titulo){
+      this.titulo = titulo;
   }
   
   public String getDescricao() {
