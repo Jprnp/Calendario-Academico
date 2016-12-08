@@ -210,8 +210,11 @@ public class App {
 		} catch (ParseException pe) {
 			System.out.println(pe.getMessage());
 		}
+		
+		System.out.println("Título do Evento:");
+		String titulo = leitor.nextLine();
 
-		System.out.println("Descricao ou nome do Evento:");
+		System.out.println("Descricao do Evento:");
 		String descr = leitor.nextLine();
 		int id = 1, cod = reg.getRegionalNum();
 		switch (cod) {
@@ -230,7 +233,7 @@ public class App {
 		default:
 			id = -1;
 		}
-		Data data = new Data(dtInic, dtFim, descr, reg, classif, id);
+		Data data = new Data(dtInic, dtFim, titulo, descr, reg, classif, id);
 		System.out.println("\nData criada com sucesso!");
 		System.out.println("-------------------------------------------------");
 		exibirData(data);
