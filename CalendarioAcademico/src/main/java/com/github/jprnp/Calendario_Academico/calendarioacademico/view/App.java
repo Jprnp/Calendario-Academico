@@ -1,7 +1,5 @@
 package com.github.jprnp.Calendario_Academico.calendarioacademico.view;
 
-import static com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvUtil.deletarEvento;
-
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -420,7 +418,7 @@ public class App {
 			} else {
 				CsvUtil.generateEmptyCsv(jatai, Regional.JATAI.getRegionalNum());
 			}
-			System.out.println("Salvo com Sucesso!");
+			//System.out.println("Salvo com Sucesso!");
 		} catch (RuntimeException re) {
 			System.out.println(re.getMessage());
 		}
@@ -524,6 +522,7 @@ public class App {
 					try {
 						calendario = CsvUtil.deletarEvento(calendario, index);
 						System.out.println("Evento deletado com Sucesso!");
+						salvarCalendario();
 					} catch (RuntimeException re) {
 						System.out.println(re.getMessage());
 					}
@@ -531,19 +530,23 @@ public class App {
 				case 2:
 					System.out.println("Entre com a Data Inicial");
 					calendario = editarDataInicial(index, calendario);
+					salvarCalendario();
 					break;
 				case 3:
 					System.out.println("Entre com a Data Final");
 					calendario = editarDataFinal(index, calendario);
+					salvarCalendario();
 					break;
 				case 4:
 					System.out.println("Entre com uma nova descricao ou nome:");
 					String descricao = leitor.nextLine();
 					calendario = editarDescriacao(index, calendario, descricao);
+					salvarCalendario();
 					break;
 				case 5:
 					calendario = editarClassificacao(index, calendario,
 							selecionarClassificacao("Editar Evento").getClassificacaoNum());
+					salvarCalendario();
 					break;
 				case 0:
 					cancelar = true;
@@ -570,7 +573,7 @@ public class App {
 		System.out.println("0 - Cancelar");
 	}
 
-	private static ArrayList<Data> editarRegional(int index, ArrayList<Data> calendario) {
+	/*private static ArrayList<Data> editarRegional(int index, ArrayList<Data> calendario) {
 		Data data;
 		data = calendario.get(index);
 		switch (selecionarRegional("Editar Evento").getRegionalNum()) {
@@ -605,7 +608,7 @@ public class App {
 		}
 
 		return calendario;
-	}
+	}*/
 
 	private static ArrayList<Data> editarClassificacao(int index, ArrayList<Data> calendario, int cl) {
 		switch (cl) {
