@@ -118,6 +118,7 @@ public class CsvUtil {
                     Calendar dtFim = Calendar.getInstance();
                     dtFim.setTime(SDF.parse(results[2]));
                     String descricao = results[3];
+                    String titulo = results[6];
                     Regional regional = null;
                     switch (Integer.parseInt(results[5])) {
                         case 1:
@@ -156,7 +157,7 @@ public class CsvUtil {
                             break;
                     }
 
-                    eventos.add(new Data(dtIni, dtFim, descricao, regional,
+                    eventos.add(new Data(dtIni, dtFim, titulo, descricao, regional,
                             classificacao, id));
                 } catch (ParseException pe) {
                     throw new RuntimeException(pe.getMessage());
