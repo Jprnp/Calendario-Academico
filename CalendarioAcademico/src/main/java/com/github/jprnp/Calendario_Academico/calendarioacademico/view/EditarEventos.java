@@ -13,6 +13,7 @@ import com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvUtil;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvUtil.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.*;
+import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.Buscas.buscarDataId;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.ExibirData.exibirData;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -113,6 +114,7 @@ class EditarEventos {
                         try {
                             calendario = CsvUtil.deletarEvento(calendario, index);
                             System.out.println("Evento deletado com Sucesso!");
+                            salvarCalendario();
                         } catch (RuntimeException re) {
                             System.out.println(re.getMessage());
                         }
@@ -120,19 +122,23 @@ class EditarEventos {
                     case 2:
                         System.out.println("Entre com a Data Inicial");
                         calendario = editarDataInicial(index, calendario);
+                        salvarCalendario();
                         break;
                     case 3:
                         System.out.println("Entre com a Data Final");
                         calendario = editarDataFinal(index, calendario);
+                        salvarCalendario();
                         break;
                     case 4:
                         System.out.println("Entre com uma nova descricao ou nome:");
                         String descricao = leitor.nextLine();
                         calendario = editarDescriacao(index, calendario, descricao);
+                        salvarCalendario();
                         break;
                     case 5:
                         calendario = editarClassificacao(index, calendario,
                                 selecionarClassificacao("Editar Evento").getClassificacaoNum());
+                        salvarCalendario();
                         break;
                     case 0:
                         cancelar = true;
@@ -232,10 +238,6 @@ class EditarEventos {
             System.out.println(e.getMessage());
         }
         return calendario;
-    }
-
-    private static int buscarDataId(int id, ArrayList<Data> catalao) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

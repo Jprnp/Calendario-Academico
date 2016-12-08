@@ -12,6 +12,7 @@ import com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvUtil;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.ExibirData.exibirData;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 /**
  *
@@ -82,8 +83,6 @@ class AppHelper {
             }
         }
     }
-     
-    
 
     static void salvarCalendario() {
         try {
@@ -125,8 +124,8 @@ class AppHelper {
         } while (volta == false);
 
     }
-     
-     static Classificacao selecionarClassificacao(String frase) {
+
+    static Classificacao selecionarClassificacao(String frase) {
         int op;
         menuSelecioneClassificacao(frase);
         try {
@@ -151,7 +150,7 @@ class AppHelper {
                 return selecionarClassificacao(frase);
         }
     }
-     
+
     static Regional selecionarRegional(String titulo) {
         int op;
 
@@ -177,7 +176,7 @@ class AppHelper {
         }
         return null;
     }
-    
+
     static public void getCalendario(int op) throws Exception {
         switch (op) {
             case 1:
@@ -231,5 +230,48 @@ class AppHelper {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    static ArrayList<Regional> selecionarRegionais(String titulo) {
+        menuSelecioneRegionais(titulo);
+        leitor.nextLine();
+        String selected = leitor.nextLine();
+        selected = selected.replaceAll(" ", "");
+        String[] split = selected.split(",");
+        ArrayList<Regional> regions = new ArrayList<Regional>();
+
+        for (String op : split) {
+            switch (Integer.parseInt(op)) {
+                case 1:
+                    regions.add(Regional.CATALAO);
+                    break;
+                case 2:
+                    regions.add(Regional.GOIANIA);
+                    break;
+                case 3:
+                    regions.add(Regional.GOIAS);
+                    break;
+                case 4:
+                    regions.add(Regional.JATAI);
+                    break;
+                case 5:
+                    if (split.length == 1) {
+                        regions.add(Regional.TODAS);
+                    }
+                    break;
+                case 0:
+                    if (split.length == 1) {
+                        main(argss);
+                    } else {
+                        System.out.println("Regionais invalidas na seleção." + " Tente novamente");
+                        return selecionarRegionais(titulo);
+                    }
+                    break;
+                default:
+                    System.out.println("Regionais invalidas na seleção." + " Tente novamente");
+                    return selecionarRegionais(titulo);
+            }
+        }
+        return regions;
     }
 }

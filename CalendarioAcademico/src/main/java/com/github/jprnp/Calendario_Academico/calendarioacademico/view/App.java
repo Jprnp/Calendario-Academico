@@ -52,15 +52,14 @@ class App {
                     case 3:
                         EditarEventos.editarCalendario();
                         break;
-                    case 4:
-                {
-                    try {
-                        Buscas.buscarEvento();
-                    } catch (ParseException ex) {
-                        Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                    case 4: {
+                        try {
+                            Buscas.buscarEvento();
+                        } catch (ParseException ex) {
+                            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                }
-                        break;
+                    break;
                     case 0:
                         sair = true;
                         break;
@@ -87,7 +86,6 @@ class App {
         System.out.println(" 0 = Sair");
     }
 
-
     public static void menuSelecioneRegional(String titulo) {
         System.out.println("\t" + titulo);
         System.out.println("Selecione a Regional desejada:");
@@ -97,16 +95,16 @@ class App {
         System.out.println(" 4 - Jataí");
         System.out.println(" 0 - Voltar");
     }
-    
+
     public static void menuSelecioneClassificacao(String titulo) {
         System.out.println("\t" + titulo);
         System.out.println("Selecione a classificacao do Evento:");
-        System.out.println(" 1 - Evento");
-        System.out.println(" 2 - Feriado Nacional");
-        System.out.println(" 3 - Feriado Municipal");
-        System.out.println(" 4 - Ponto Facutativo");
-        System.out.println(" 5 - Recesso Acadêmico");
-    }    
+        System.out.println(" 1 - Feriado Nacional");
+        System.out.println(" 2 - Feriado Municipal");
+        System.out.println(" 3 - Ponto Facutativo");
+        System.out.println(" 4 - Recesso Academico");
+        System.out.println(" 5 - Evento");
+    }
 
     public static void menuEditarCalendario() {
         System.out.println("\t Editar Calendario");
@@ -124,7 +122,14 @@ class App {
         System.out.println(" 2 = Editar");
         System.out.println(" 0 = voltar");
     }
-    
-    
-    
+
+    public static void menuSelecioneRegionais(String titulo) {
+        System.out.println("\t" + titulo);
+        System.out.println("Selecione as Regionais desejadas" + " (separadas por vírgula / MAX 4):");
+        System.out.println(" 1 - Catalão");
+        System.out.println(" 2 - Goiânia");
+        System.out.println(" 3 - Goiás");
+        System.out.println(" 4 - Jataí");
+        System.out.println(" 0 - Voltar");
+    }
 }

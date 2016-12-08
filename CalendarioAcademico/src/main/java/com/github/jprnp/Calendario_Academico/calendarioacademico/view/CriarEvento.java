@@ -8,6 +8,7 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.ExibirData.exibirData;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /*
@@ -15,15 +16,16 @@ import java.util.Calendar;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Estevao
  */
 public class CriarEvento {
-    
+
     public static void criarEvento() {
-        Regional reg = selecionarRegional("Criar Evento");
+        boolean ok = false;
+        // Regional reg = selecionarRegional("Criar Evento");
+        ArrayList<Regional> regios = selecionarRegionais("Criar Evento");
         Classificacao classif = selecionarClassificacao("Criar Evento");
         Calendar dtInic = Calendar.getInstance();
         Calendar dtFim = Calendar.getInstance();
@@ -51,65 +53,76 @@ public class CriarEvento {
 
         System.out.println("Descricao do Evento:");
         String descr = leitor.nextLine();
-        int id = 1, cod = reg.getRegionalNum();
-        switch (cod) {
-            case 1:
-                id = CsvUtil.generateNewId(catalao);
-                break;
-            case 2:
-                id = CsvUtil.generateNewId(goiania);
-                break;
-            case 3:
-                id = CsvUtil.generateNewId(goias);
-                break;
-            case 4:
-                id = CsvUtil.generateNewId(jatai);
-                break;
-            default:
-                id = -1;
-        }
-        Data data = new Data(dtInic, dtFim, titulo, descr, reg, classif, id);
-        System.out.println("\nData criada com sucesso!");
-        System.out.println("-------------------------------------------------");
-        exibirData(data);
-        try {
-            boolean sair = false;
-            do {
-                System.out.println("O que deseja fazer?");
-                System.out.println(" 1 - Iserir o evento criado");
-                System.out.println(" 2 - Descarta o evento criado");
-                switch (readInteger()) {
-                    case 1:
-                        switch (reg.getRegionalNum()) {
-                            case 1:
-                                CsvUtil.addEvento(catalao, data);
-                                break;
-                            case 2:
-                                CsvUtil.addEvento(goiania, data);
-                                break;
-                            case 3:
-                                CsvUtil.addEvento(goias, data);
-                                break;
-                            case 4:
-                                CsvUtil.addEvento(jatai, data);
-                                break;
-                            case 5:
-                                CsvUtil.addEvento(catalao, data);
-                                CsvUtil.addEvento(goiania, data);
-                                CsvUtil.addEvento(goias, data);
-                                CsvUtil.addEvento(jatai, data);
-                        }
-                        sair = true;
-                        break;
-                    case 2:
-                        sair = true;
-                        break;
-                }
-            } while (sair != true);
-        } catch (NumberFormatException nfe) {
-            System.out.println("Comando invalido\n");
-        }
+        int ans = 0;
+        for (Regional reg : regios) {
+            int id = 1, cod = reg.getRegionalNum();
+            switch (cod) {
+                case 1:
+                    id = CsvUtil.generateNewId(catalao);
+                    break;
+                case 2:
+                    id = CsvUtil.generateNewId(goiania);
+                    break;
+                case 3:
+                    id = CsvUtil.generateNewId(goias);
+                    break;
+                case 4:
+                    id = CsvUtil.generateNewId(jatai);
+                    break;
+                default:
+                    id = -1;
+            }
+            Data data = new Data(dtInic, dtFim, titulo, descr, reg, classif, id);
+            if (!ok) {
+                System.out.println("\nData criada com sucesso!");
+                System.out.println("-------------------------------------------------");
+                exibirData(data);
+            }
+            try {
+                boolean sair = false;
+                do {
+                    if (!ok) {
+                        System.out.println("O que deseja fazer?");
+                        System.out.println(" 1 - Iserir o evento criado");
+                        System.out.println(" 2 - Descarta o evento criado");
+                        ans = readInteger();
+                        ok = true;
+                    }
+                    switch (ans) {
+                        case 1:
+                            switch (reg.getRegionalNum()) {
 
+                                case 1:
+                                    CsvUtil.addEvento(catalao, data);
+                                    break;
+                                case 2:
+                                    CsvUtil.addEvento(goiania, data);
+                                    break;
+                                case 3:
+                                    CsvUtil.addEvento(goias, data);
+                                    break;
+                                case 4:
+                                    CsvUtil.addEvento(jatai, data);
+                                    break;
+                                case 5:
+                                    CsvUtil.addEvento(catalao, data);
+                                    CsvUtil.addEvento(goiania, data);
+                                    CsvUtil.addEvento(goias, data);
+                                    CsvUtil.addEvento(jatai, data);
+                            }
+                            sair = true;
+                            break;
+                        case 2:
+                            sair = true;
+                            break;
+
+                    }
+                } while (sair != true);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Comando invalido\n");
+            }
+        }
+        salvarCalendario();
     }
-    
+
 }
