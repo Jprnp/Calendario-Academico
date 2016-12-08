@@ -230,6 +230,7 @@ public class CsvUtil {
                         .getClassificacaoNum()));
                 writer.append(COMMA);
                 writer.append(String.valueOf(e.getRegional().getRegionalNum()));
+                
             }
             writer.flush();
             writer.close();
@@ -380,7 +381,7 @@ public class CsvUtil {
         String name = FILECOMENT;
         try {
             FileWriter writer = new FileWriter(new File(name), false);
-            writer.append(HEADER);
+            writer.append(HEADER + ",coment");
             writer.flush();
             writer.close();
             //System.out.println("Dados armazenados com sucesso!");
