@@ -188,7 +188,9 @@ public class App {
 	}
 
 	private static void criarEvento() {
-		Regional reg = selecionarRegional("Criar Evento");
+		boolean ok = false;
+		// Regional reg = selecionarRegional("Criar Evento");
+		ArrayList<Regional> regios = selecionarRegionais("Criar Evento");
 		Classificacao classif = selecionarClassificacao("Criar Evento");
 		Calendar dtInic = Calendar.getInstance();
 		Calendar dtFim = Calendar.getInstance();
@@ -210,71 +212,80 @@ public class App {
 		} catch (ParseException pe) {
 			System.out.println(pe.getMessage());
 		}
-		
+
 		System.out.println("Título do Evento:");
 		String titulo = leitor.nextLine();
 
 		System.out.println("Descricao do Evento:");
 		String descr = leitor.nextLine();
-		int id = 1, cod = reg.getRegionalNum();
-		switch (cod) {
-		case 1:
-			id = CsvUtil.generateNewId(catalao);
-			break;
-		case 2:
-			id = CsvUtil.generateNewId(goiania);
-			break;
-		case 3:
-			id = CsvUtil.generateNewId(goias);
-			break;
-		case 4:
-			id = CsvUtil.generateNewId(jatai);
-			break;
-		default:
-			id = -1;
-		}
-		Data data = new Data(dtInic, dtFim, titulo, descr, reg, classif, id);
-		System.out.println("\nData criada com sucesso!");
-		System.out.println("-------------------------------------------------");
-		exibirData(data);
-		try {
-			boolean sair = false;
-			do {
-				System.out.println("O que deseja fazer?");
-				System.out.println(" 1 - Iserir o evento criado");
-				System.out.println(" 2 - Descarta o evento criado");
-				switch (readInteger()) {
-				case 1:
-					switch (reg.getRegionalNum()) {
+		int ans = 0;
+		for (Regional reg : regios) {
+			int id = 1, cod = reg.getRegionalNum();
+			switch (cod) {
+			case 1:
+				id = CsvUtil.generateNewId(catalao);
+				break;
+			case 2:
+				id = CsvUtil.generateNewId(goiania);
+				break;
+			case 3:
+				id = CsvUtil.generateNewId(goias);
+				break;
+			case 4:
+				id = CsvUtil.generateNewId(jatai);
+				break;
+			default:
+				id = -1;
+			}
+			Data data = new Data(dtInic, dtFim, titulo, descr, reg, classif, id);
+			if (!ok) {
+				System.out.println("\nData criada com sucesso!");
+				System.out.println("-------------------------------------------------");
+				exibirData(data);
+			}
+			try {
+				boolean sair = false;
+				do {
+					if (!ok) {
+						System.out.println("O que deseja fazer?");
+						System.out.println(" 1 - Iserir o evento criado");
+						System.out.println(" 2 - Descarta o evento criado");
+						ans = readInteger();
+						ok = true;
+					}
+					switch (ans) {
 					case 1:
-						CsvUtil.addEvento(catalao, data);
+						switch (reg.getRegionalNum()) {
+						case 1:
+							CsvUtil.addEvento(catalao, data);
+							break;
+						case 2:
+							CsvUtil.addEvento(goiania, data);
+							break;
+						case 3:
+							CsvUtil.addEvento(goias, data);
+							break;
+						case 4:
+							CsvUtil.addEvento(jatai, data);
+							break;
+						case 5:
+							CsvUtil.addEvento(catalao, data);
+							CsvUtil.addEvento(goiania, data);
+							CsvUtil.addEvento(goias, data);
+							CsvUtil.addEvento(jatai, data);
+						}
+						sair = true;
 						break;
 					case 2:
-						CsvUtil.addEvento(goiania, data);
+						sair = true;
 						break;
-					case 3:
-						CsvUtil.addEvento(goias, data);
-						break;
-					case 4:
-						CsvUtil.addEvento(jatai, data);
-						break;
-					case 5:
-						CsvUtil.addEvento(catalao, data);
-						CsvUtil.addEvento(goiania, data);
-						CsvUtil.addEvento(goias, data);
-						CsvUtil.addEvento(jatai, data);
 					}
-					sair = true;
-					break;
-				case 2:
-					sair = true;
-					break;
-				}
-			} while (sair != true);
-		} catch (NumberFormatException nfe) {
-			System.out.println("Comando invalido\n");
+				} while (sair != true);
+			} catch (NumberFormatException nfe) {
+				System.out.println("Comando invalido\n");
+			}
 		}
-
+		salvarCalendario();
 	}
 
 	private static Regional selecionarRegional(String titulo) {
@@ -332,11 +343,11 @@ public class App {
 	private static void menuSelecioneClassificacao(String titulo) {
 		System.out.println("\t" + titulo);
 		System.out.println("Selecione a classificacao do Evento:");
-		System.out.println(" 1 - Evento");
-		System.out.println(" 2 - Feriado Nacional");
-		System.out.println(" 3 - Feriado Municipal");
-		System.out.println(" 4 - Ponto Facutativo");
-		System.out.println(" 5 - Recesso Acadêmico");
+		System.out.println(" 1 - Feriado Nacional");
+		System.out.println(" 2 - Feriado Municipal");
+		System.out.println(" 3 - Ponto Facutativo");
+		System.out.println(" 4 - Recesso Academico");
+		System.out.println(" 5 - Evento");
 	}
 
 	/**
@@ -419,7 +430,7 @@ public class App {
 		int id, codReg, index;
 		boolean voltar = false;
 		do {
-		codReg = selecionarRegional("Editar Calendario").getRegionalNum();		
+			codReg = selecionarRegional("Editar Calendario").getRegionalNum();
 			System.out.println("Digite o Id do Evento:\n");
 			id = readInteger();
 			switch (codReg) {
@@ -656,6 +667,58 @@ public class App {
 			System.out.println("\nFormato Invalido!");
 			return -1;
 		}
+	}
+
+	private static void menuSelecioneRegionais(String titulo) {
+		System.out.println("\t" + titulo);
+		System.out.println("Selecione as Regionais desejadas" + " (separadas por vírgula / MAX 4):");
+		System.out.println(" 1 - Catalão");
+		System.out.println(" 2 - Goiânia");
+		System.out.println(" 3 - Goiás");
+		System.out.println(" 4 - Jataí");
+		System.out.println(" 0 - Voltar");
+	}
+
+	private static ArrayList<Regional> selecionarRegionais(String titulo) {
+		menuSelecioneRegionais(titulo);
+		String selected = leitor.nextLine();
+		selected = selected.replaceAll(" ", "");
+		String[] split = selected.split(",");
+		ArrayList<Regional> regions = new ArrayList<Regional>();
+
+		for (String op : split) {
+			switch (op) {
+			case "1":
+				regions.add(Regional.CATALAO);
+				break;
+			case "2":
+				regions.add(Regional.GOIANIA);
+				break;
+			case "3":
+				regions.add(Regional.GOIAS);
+				break;
+			case "4":
+				regions.add(Regional.JATAI);
+				break;
+			case "5":
+				if (split.length == 1) {
+					regions.add(Regional.TODAS);
+				}
+				break;
+			case "0":
+				if (split.length == 1) {
+					main(argss);
+				} else {
+					System.out.println("Regionais invalidas na seleção." + " Tente novamente");
+					return selecionarRegionais(titulo);
+				}
+				break;
+			default:
+				System.out.println("Regionais invalidas na seleção." + " Tente novamente");
+				return selecionarRegionais(titulo);
+			}
+		}
+		return regions;
 	}
 
 }
