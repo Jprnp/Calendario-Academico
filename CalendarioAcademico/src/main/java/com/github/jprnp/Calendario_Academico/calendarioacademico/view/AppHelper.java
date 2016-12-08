@@ -65,22 +65,27 @@ class AppHelper {
         try {
             jatai = CsvUtil.loadCsv(Regional.JATAI);
         } catch (RuntimeException re4) {
-            try {
-                for (Data data : catalao) {
+        }
+        try {
+            for (Data data : catalao) {
+                if(!todas.contains(data))
                     todas.add(data);
-                }
-                for (Data data : goias) {
-                    todas.add(data);
-                }
-                for (Data data : goiania) {
-                    todas.add(data);
-                }
-                for (Data data : jatai) {
-                    todas.add(data);
-                }
-                todas = CsvUtil.sortCsv(todas);
-            } catch (RuntimeException re5) {
+                
             }
+            for (Data data : goias) {
+                if(!todas.contains(data))
+                todas.add(data);
+            }
+            for (Data data : goiania) {
+                if(!todas.contains(data))
+                todas.add(data);
+            }
+            for (Data data : jatai) {
+                if(!todas.contains(data))
+                todas.add(data);
+            }
+            todas = CsvUtil.sortCsv(todas);
+        } catch (RuntimeException re5) {
         }
     }
 
@@ -116,7 +121,7 @@ class AppHelper {
         boolean volta = false;
         do {
             menuEscolha();
-            switch (leitor.nextInt()) {
+            switch (readInteger()) {
                 case 1:
 
             }
@@ -219,6 +224,16 @@ class AppHelper {
                 }
                 System.out.println("");
                 break;
+            case 5:
+                if (!todas.isEmpty()) {
+                    for (Data data : todas) {
+                        exibirData(data);
+                    }
+                } else {
+                    System.out.println("Calendario Vazio\n");
+                }
+                System.out.println("");
+                break;
             default:
                 throw new Exception("Codigo invalido! Tente Novamente:\n");
         }
@@ -234,7 +249,6 @@ class AppHelper {
 
     static ArrayList<Regional> selecionarRegionais(String titulo) {
         menuSelecioneRegionais(titulo);
-        leitor.nextLine();
         String selected = leitor.nextLine();
         selected = selected.replaceAll(" ", "");
         String[] split = selected.split(",");
@@ -274,4 +288,5 @@ class AppHelper {
         }
         return regions;
     }
+    
 }

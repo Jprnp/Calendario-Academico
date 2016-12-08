@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Data;
+import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.*;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +34,7 @@ class App {
         try {
             try {
                 if (loaded) {
-                    AppHelper.carregarCalendarios();
+                    carregarCalendarios();
                     loaded = false;
                 }
             } catch (FileNotFoundException e) {
@@ -93,6 +94,7 @@ class App {
         System.out.println(" 2 - Goiânia");
         System.out.println(" 3 - Goiás");
         System.out.println(" 4 - Jataí");
+        System.out.println(" 5 - Todas");
         System.out.println(" 0 - Voltar");
     }
 

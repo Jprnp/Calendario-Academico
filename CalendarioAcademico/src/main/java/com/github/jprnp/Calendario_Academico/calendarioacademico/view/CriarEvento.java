@@ -94,21 +94,26 @@ public class CriarEvento {
 
                                 case 1:
                                     CsvUtil.addEvento(catalao, data);
+                                    todas.add(data);
                                     break;
                                 case 2:
                                     CsvUtil.addEvento(goiania, data);
+                                    todas.add(data);
                                     break;
                                 case 3:
                                     CsvUtil.addEvento(goias, data);
+                                    todas.add(data);
                                     break;
                                 case 4:
                                     CsvUtil.addEvento(jatai, data);
+                                    todas.add(data);
                                     break;
                                 case 5:
                                     CsvUtil.addEvento(catalao, data);
                                     CsvUtil.addEvento(goiania, data);
                                     CsvUtil.addEvento(goias, data);
                                     CsvUtil.addEvento(jatai, data);
+                                    todas.add(data);
                             }
                             sair = true;
                             break;

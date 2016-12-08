@@ -5,7 +5,7 @@
  */
 package com.github.jprnp.Calendario_Academico.calendarioacademico.view;
 
-import com.github.jprnp.Calendario_Academico.calendarioacademico.*;
+import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.Buscas.*;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Classificacao;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Data;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Regional;
@@ -13,7 +13,6 @@ import com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvUtil;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvUtil.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.*;
-import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.Buscas.buscarDataId;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.ExibirData.exibirData;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -239,5 +238,6 @@ class EditarEventos {
         }
         return calendario;
     }
+
     
 }

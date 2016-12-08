@@ -9,10 +9,13 @@ import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Data;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvBusca;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvUtil;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App.*;
-import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.readDateFormat;
+import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.ExibirData.*;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +27,7 @@ public class Buscas {
         boolean volta = false;
         do {
             menuEscolha();
-            switch (leitor.nextInt()) {
+            switch (readInteger()) {
                 case 1:
 
             }
@@ -40,7 +43,7 @@ public class Buscas {
         boolean volta = false;
         do {
             buscaMenu();
-            switch (leitor.nextInt()) {
+            switch (readInteger()) {
                 case 1:
                     buscarData();
                     volta = true;
@@ -75,12 +78,17 @@ public class Buscas {
     public static void buscarData() throws ParseException {
         ArrayList<Data> busca = null;
         System.out.println("Digite a data:");
-        String dt = readDateFormat();
+        String dt;
+             dt = readDateFormat();
+         
         busca = CsvBusca.buscaData(App.todas, dt);
         if (busca.isEmpty()) {
             System.out.println("Nenhuma evento encontrado.");
         } else {
             busca = CsvUtil.sortCsv(busca);
+        }
+        for (Data data : busca) {
+            exibirData(data);
         }
     }
 
@@ -92,6 +100,9 @@ public class Buscas {
             System.out.println("Nenhuma evento encontrado.");
         } else {
             busca = CsvUtil.sortCsv(busca);
+        }
+        for (Data data : busca) {
+            exibirData(data);
         }
     }
 
@@ -108,24 +119,30 @@ public class Buscas {
         if (busca.isEmpty()) {
             System.out.println("Nenhuma evento encontrado.");
         } else {
-            busca = CsvUtil.sortCsv(busca);
+          busca = CsvUtil.sortCsv(busca);
+        }
+        for (Data data : busca) {
+            exibirData(data);
         }
     }
 
     public static void buscaId() {
         ArrayList<Data> busca = null;
         System.out.println("Digite o id do Evento:");
-        busca.add(CsvBusca.buscaId(App.todas, leitor.nextInt()));
+        busca.add(CsvBusca.buscaId(App.todas, readInteger()));
         if (busca.isEmpty()) {
             System.out.println("Nenhuma evento encontrado.");
         } else {
             busca = CsvUtil.sortCsv(busca);
         }
-
-    }
+        for (Data data : busca) {
+            exibirData(data);
+        }
+        
+   }
     
     
-    public static int buscarDataId(int id, ArrayList<Data> calendario) {
+    static int buscarDataId(int id, ArrayList<Data> calendario) {
         for (Data data : calendario) {
             if (data.getIdEvento() == id) {
                 return calendario.indexOf(data);

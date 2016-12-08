@@ -48,6 +48,7 @@ public class ExibirData {
                     case 2:
                     case 3:
                     case 4:
+                    case 5:
                         getCalendario(op);
                         break;
                     case 0:
