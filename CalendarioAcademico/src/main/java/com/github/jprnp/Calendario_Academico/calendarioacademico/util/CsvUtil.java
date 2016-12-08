@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Classificacao;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Data;
+import com.github.jprnp.Calendario_Academico.calendarioacademico.data.DataComent;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Regional;
 
 /**
@@ -33,6 +34,7 @@ public class CsvUtil {
     static final String FILEGOIANIA = "goiania.csv";
     static final String FILEGOIAS = "goias.csv";
     static final String FILEJATAI = "jatai.csv";
+    static final String FILECOMENT = "coment.csv";
     public static final String FILENAME = "calacaddata.csv";
     public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -52,7 +54,7 @@ public class CsvUtil {
         if (index < lista.size()) {
             lista.remove(index);
         } else {
-        	throw new RuntimeException("Evento não encontrado.");
+            throw new RuntimeException("Evento não encontrado.");
         }
 
         return lista;
@@ -207,10 +209,10 @@ public class CsvUtil {
                     break;
                 case 4:
                     name = FILEJATAI;
-                    break;            
+                    break;
             }
             FileWriter writer = new FileWriter(new File(name), false);
-            
+
             writer.append(HEADER);
             for (Data e : eventos) {
                 writer.append(NEWLINE);
@@ -237,22 +239,22 @@ public class CsvUtil {
             throw new RuntimeException(ex.getMessage());
         }
     }
-    
+
     public static void generateEmptyCsv(ArrayList<Data> eventos, int regId) {
         String name = null;
-        switch(regId) {
-        case 1:
-        	name = FILECATALAO;
-            break;
-        case 2:
-        	name = FILEGOIANIA;
-            break;
-        case 3:
-        	name = FILEGOIAS;
-            break;
-        case 4:
-        	name = FILEJATAI;
-            break;  
+        switch (regId) {
+            case 1:
+                name = FILECATALAO;
+                break;
+            case 2:
+                name = FILEGOIANIA;
+                break;
+            case 3:
+                name = FILEGOIAS;
+                break;
+            case 4:
+                name = FILEJATAI;
+                break;
         }
         try {
             FileWriter writer = new FileWriter(new File(name), false);
@@ -265,19 +267,126 @@ public class CsvUtil {
             throw new RuntimeException(ex.getMessage());
         }
     }
-    
+
     public static int generateNewId(ArrayList<Data> eventos) {
-    	int maiorId = 0;
-    	
-    	if(!eventos.isEmpty()) {
-    		for(Data dt : eventos) {
-    			if (dt.getIdEvento() > maiorId) {
-    				maiorId = dt.getIdEvento();
-    			}
-    		}
-    		return maiorId + 1;
-    	} else {
-    		return 1;
-    	}
+        int maiorId = 0;
+
+        if (!eventos.isEmpty()) {
+            for (Data dt : eventos) {
+                if (dt.getIdEvento() > maiorId) {
+                    maiorId = dt.getIdEvento();
+                }
+            }
+            return maiorId + 1;
+        } else {
+            return 1;
+        }
+    }
+
+    public static ArrayList<DataComent> loadCsvComent() throws RuntimeException {
+        ArrayList<DataComent> eventos = new ArrayList<DataComent>();
+        String line;
+        Scanner csvFile = null;
+        csvFile.nextLine();
+        while (csvFile.hasNextLine()) {
+            line = csvFile.nextLine();
+            String[] results = line.split(COMMA);
+            int id = Integer.parseInt(results[0]);
+            try {
+                Calendar dtIni = (Calendar.getInstance());
+                dtIni.setTime(SDF.parse(results[1]));
+                Calendar dtFim = Calendar.getInstance();
+                dtFim.setTime(SDF.parse(results[2]));
+                String descricao = results[4];
+                String titulo = results[3];
+                String coment = results[7];
+                Regional regional = null;
+                switch (Integer.parseInt(results[6])) {
+                    case 1:
+                        regional = Regional.CATALAO;
+                        break;
+                    case 2:
+                        regional = Regional.GOIANIA;
+                        break;
+                    case 3:
+                        regional = Regional.GOIAS;
+                        break;
+                    case 4:
+                        regional = Regional.JATAI;
+                        break;
+                }
+
+                Classificacao classificacao = null;
+                switch (Integer.parseInt(results[5])) {
+                    case 5:
+                        classificacao = Classificacao.EVENTO;
+                        break;
+                    case 1:
+                        classificacao = Classificacao.FERIADO_NACIONAL;
+                        break;
+                    case 2:
+                        classificacao = Classificacao.FERIADO_MUNICIPAL;
+                        break;
+                    case 3:
+                        classificacao = Classificacao.PONTO_FACUTATIVO;
+                        break;
+                    case 4:
+                        classificacao = Classificacao.RECESSO_ACADEMICO;
+                        break;
+                }
+                eventos.add(new DataComent(dtIni, dtFim, titulo, descricao, regional, classificacao, id, coment));
+            } catch (ParseException pe) {
+                throw new RuntimeException(pe.getMessage());
+            }
+        }
+        return eventos;
+    }
+    
+    public static void generateCsvComent(ArrayList<DataComent> eventos) {
+        String name = FILECOMENT;
+        try {
+            FileWriter writer = new FileWriter(new File(name), false);
+
+            writer.append(HEADER + ",coment");
+            for (DataComent e : eventos) {
+                writer.append(NEWLINE);
+                writer.append(String.valueOf(e.getIdEvento()));
+                writer.append(COMMA);
+                writer.append(SDF.format(e.getDataInicial().getTime()));
+                writer.append(COMMA);
+                writer.append(SDF.format(e.getDataFinal().getTime()));
+                writer.append(COMMA);
+                writer.append(e.getTitulo());
+                writer.append(COMMA);
+                writer.append(e.getDescricao());
+                writer.append(COMMA);
+                writer.append(String.valueOf(e.getClassificacao()
+                        .getClassificacaoNum()));
+                writer.append(COMMA);
+                writer.append(String.valueOf(e.getRegional().getRegionalNum()));
+                writer.append(COMMA);
+                writer.append(e.getComentario());
+            }
+            writer.flush();
+            writer.close();
+            //System.out.println("Dados armazenados com sucesso!");
+        } catch (IOException ex) {
+            //System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+
+    public static void generateEmptyCsv(ArrayList<DataComent> eventos) {
+        String name = FILECOMENT;
+        try {
+            FileWriter writer = new FileWriter(new File(name), false);
+            writer.append(HEADER);
+            writer.flush();
+            writer.close();
+            //System.out.println("Dados armazenados com sucesso!");
+        } catch (IOException ex) {
+            //System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 }

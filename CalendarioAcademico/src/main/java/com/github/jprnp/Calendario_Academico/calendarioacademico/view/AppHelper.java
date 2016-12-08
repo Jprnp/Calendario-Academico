@@ -13,6 +13,7 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.ExibirData.exibirData;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 /**
  *
@@ -70,7 +71,6 @@ class AppHelper {
             for (Data data : catalao) {
                 if(!todas.contains(data))
                     todas.add(data);
-                
             }
             for (Data data : goias) {
                 if(!todas.contains(data))
@@ -86,6 +86,10 @@ class AppHelper {
             }
             todas = CsvUtil.sortCsv(todas);
         } catch (RuntimeException re5) {
+        }
+        try {
+            coment = CsvUtil.loadCsvComent();
+        } catch (RuntimeException re4) {
         }
     }
 
@@ -110,6 +114,11 @@ class AppHelper {
                 CsvUtil.generateCsv(jatai);
             } else {
                 CsvUtil.generateEmptyCsv(jatai, Regional.JATAI.getRegionalNum());
+            }
+            if (!coment.isEmpty()) {
+                CsvUtil.generateCsvComent(coment);
+            } else {
+                CsvUtil.generateEmptyCsv(coment);
             }
             System.out.println("Salvo com Sucesso!");
         } catch (RuntimeException re) {
@@ -182,7 +191,7 @@ class AppHelper {
         return null;
     }
 
-    static public void getCalendario(int op) throws Exception {
+    static void getCalendario(int op) throws Exception {
         switch (op) {
             case 1:
                 if (!catalao.isEmpty()) {
@@ -243,7 +252,8 @@ class AppHelper {
         try {
             return leitor.nextInt();
         } catch (NumberFormatException e) {
-            return -1;
+            System.out.println("Digite apenas numeros.");
+            return readInteger();
         }
     }
 
@@ -275,7 +285,7 @@ class AppHelper {
                     break;
                 case 0:
                     if (split.length == 1) {
-                        main(argss);
+                        main(new String[0]);
                     } else {
                         System.out.println("Regionais invalidas na seleção." + " Tente novamente");
                         return selecionarRegionais(titulo);

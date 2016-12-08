@@ -6,16 +6,16 @@
 package com.github.jprnp.Calendario_Academico.calendarioacademico.view;
 
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Data;
+import com.github.jprnp.Calendario_Academico.calendarioacademico.util.Anotacao;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvBusca;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.util.CsvUtil;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.ExibirData.*;
-import java.io.IOException;
+import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AnotarEvento.*;
+import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.EditarEventos.*;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -23,19 +23,82 @@ import java.util.logging.Logger;
  */
 public class Buscas {
     
-     public static void escolhaBusca() {
+    private static Anotacao anot = new Anotacao();
+
+    public static void escolhaBusca(ArrayList<Data> busca) {
         boolean volta = false;
         do {
             menuEscolha();
             switch (readInteger()) {
                 case 1:
-
+                    if (busca.size() > 1) {
+                        System.out.println("Digite o id do evento que deseja anotar:");
+                        anotarEvento(busca.get(buscarDataId(readInteger(), busca)));
+                    } else {
+                        anotarEvento(busca.get(0));
+                    }
+                    volta = true;
+                    break;
+                case 2:
+                    if (busca.size() > 1) {
+                        System.out.println("Digite o id do evento que deseja editar:");
+                        int idx;
+                        idx = buscarDataId(readInteger(), busca);
+                        switch (busca.get(idx).getRegional().getRegionalNum()) {
+                            case 1:
+                                catalao = editarCalendario2(idx , catalao);
+                                break;
+                            case 2:
+                                goiania = editarCalendario2(idx , goiania);
+                                break;
+                            case 3:
+                                goias = editarCalendario2(idx , goias);
+                                break;
+                            case 4:
+                                jatai = editarCalendario2(idx , jatai);
+                                break;
+                            case 5:
+                                catalao = editarCalendario2(idx , catalao);
+                                goiania = editarCalendario2(idx , goiania);
+                                goias = editarCalendario2(idx , goias);
+                                jatai = editarCalendario2(idx , jatai);
+                                break;
+                        }                   
+                    } else {
+                        switch (busca.get(0).getRegional().getRegionalNum()) {
+                            case 1:
+                                catalao = editarCalendario2(0 , catalao);
+                                break;
+                            case 2:
+                                goiania = editarCalendario2(0 , goiania);
+                                break;
+                            case 3:
+                                goias = editarCalendario2(0 , goias);
+                                break;
+                            case 4:
+                                jatai = editarCalendario2(0 , jatai);
+                                break;
+                            case 5:
+                                catalao = editarCalendario2(0 , catalao);
+                                goiania = editarCalendario2(0 , goiania);
+                                goias = editarCalendario2(0 , goias);
+                                jatai = editarCalendario2(0 , jatai);
+                                break;
+                        }
+                    }
+                    volta = true;
+                    break;
+                case 0:
+                    volta = true;
+                default:
+                    System.out.println("Opcao invalida!");
+                    break;
             }
-
+            
         } while (volta == false);
-
+        main(new String[0]);
     }
-    
+
     /**
      * Classe que vai buscar o evento;
      */
@@ -60,7 +123,12 @@ public class Buscas {
                     buscaId();
                     volta = true;
                     break;
-
+                case 0:
+                    volta = true;
+                    break;
+                default:
+                    System.out.println("Opcao Invalida");
+                    break;
             }
         } while (volta == false);
 
@@ -79,8 +147,8 @@ public class Buscas {
         ArrayList<Data> busca = null;
         System.out.println("Digite a data:");
         String dt;
-             dt = readDateFormat();
-         
+        dt = readDateFormat();
+
         busca = CsvBusca.buscaData(App.todas, dt);
         if (busca.isEmpty()) {
             System.out.println("Nenhuma evento encontrado.");
@@ -90,6 +158,7 @@ public class Buscas {
         for (Data data : busca) {
             exibirData(data);
         }
+        escolhaBusca(busca);
     }
 
     public static void bucarNome() throws ParseException {
@@ -104,6 +173,7 @@ public class Buscas {
         for (Data data : busca) {
             exibirData(data);
         }
+        escolhaBusca(busca);
     }
 
     public static void buscaDescri() {
@@ -119,11 +189,12 @@ public class Buscas {
         if (busca.isEmpty()) {
             System.out.println("Nenhuma evento encontrado.");
         } else {
-          busca = CsvUtil.sortCsv(busca);
+            busca = CsvUtil.sortCsv(busca);
         }
         for (Data data : busca) {
             exibirData(data);
         }
+        escolhaBusca(busca);
     }
 
     public static void buscaId() {
@@ -138,10 +209,9 @@ public class Buscas {
         for (Data data : busca) {
             exibirData(data);
         }
-        
-   }
-    
-    
+        escolhaBusca(busca);
+    }
+
     static int buscarDataId(int id, ArrayList<Data> calendario) {
         for (Data data : calendario) {
             if (data.getIdEvento() == id) {
@@ -193,15 +263,27 @@ public class Buscas {
                 }
                 System.out.println("");
                 break;
+            case 5:
+                if (!todas.isEmpty()) {
+                    for (Data data : todas) {
+                        exibirData(data);
+                    }
+                } else {
+                    System.out.println("Calendario Vazio\n");
+                }
+                System.out.println("");
+                break;
+                
             default:
                 throw new Exception("Codigo invalido! Tente Novamente:\n");
         }
     }
-    
+
     public static void menuEscolha() {
         System.out.println("\t O que deseja Fazer");
         System.out.println(" 1 = Anotar Evento");
         System.out.println(" 2 = Editar");
         System.out.println(" 0 = voltar");
     }
+
 }

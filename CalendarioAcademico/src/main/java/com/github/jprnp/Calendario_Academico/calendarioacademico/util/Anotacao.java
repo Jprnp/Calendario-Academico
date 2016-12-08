@@ -9,20 +9,19 @@ public class Anotacao {
 
     private static ArrayList<DataComent> arrayDataComent = new ArrayList();
     
-    public static void adicionaEvento(Data data, String coment)
+    public static ArrayList<DataComent> adicionaEvento(Data data, String coment)
             throws RuntimeException {
 
         try {
         DataComent dataComent = new DataComent(data.getDataInicial(),
                 data.getDataFinal(), data.getTitulo(), data.getDescricao(), 
-                data.getRegional(), data.getIdEvento(), coment);
-            
+                data.getRegional(), data.getClassificacao(), data.getIdEvento(), coment);
             arrayDataComent.add(dataComent);
         } catch (RuntimeException ex) {
             throw new RuntimeException("Ocorreu um erro ao tentar criar" +
                                       " um objeto DataComent.");
         }
-
+        return getArrayDataComent();
     }
 
     public static void removeEvento(int idEvento)

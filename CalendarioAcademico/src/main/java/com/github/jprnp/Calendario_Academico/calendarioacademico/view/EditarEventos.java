@@ -139,6 +139,11 @@ class EditarEventos {
                                 selecionarClassificacao("Editar Evento").getClassificacaoNum());
                         salvarCalendario();
                         break;
+                    case 6:
+                        System.out.println("Entre com uma nova descricao ou nome:");
+                        String titulo = leitor.nextLine();
+                        calendario = editarTitulo(index, calendario, titulo);
+                        salvarCalendario();
                     case 0:
                         cancelar = true;
                         break;
@@ -193,19 +198,19 @@ class EditarEventos {
     
     static ArrayList<Data> editarClassificacao(int index, ArrayList<Data> calendario, int cl) {
         switch (cl) {
-            case 1:
+            case 5:
                 calendario.get(index).setClassificacao(Classificacao.EVENTO);
                 return calendario;
-            case 2:
+            case 1:
                 calendario.get(index).setClassificacao(Classificacao.FERIADO_NACIONAL);
                 return calendario;
-            case 3:
+            case 2:
                 calendario.get(index).setClassificacao(Classificacao.FERIADO_MUNICIPAL);
                 return calendario;
-            case 4:
+            case 3:
                 calendario.get(index).setClassificacao(Classificacao.PONTO_FACUTATIVO);
                 return calendario;
-            case 5:
+            case 4:
                 calendario.get(index).setClassificacao(Classificacao.RECESSO_ACADEMICO);
                 return calendario;
         }
@@ -214,6 +219,11 @@ class EditarEventos {
 
     static ArrayList<Data> editarDescriacao(int index, ArrayList<Data> calendario, String descricao) {
         calendario.get(index).setDescricao(descricao);
+        return calendario;
+    }
+    
+    static ArrayList<Data> editarTitulo(int index, ArrayList<Data> calendario, String titulo) {
+        calendario.get(index).setTitulo(titulo);
         return calendario;
     }
 

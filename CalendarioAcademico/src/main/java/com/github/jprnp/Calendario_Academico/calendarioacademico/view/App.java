@@ -4,10 +4,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Data;
+import com.github.jprnp.Calendario_Academico.calendarioacademico.data.DataComent;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.*;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class App {
 
@@ -19,7 +18,7 @@ class App {
     static ArrayList<Data> goias = new ArrayList<Data>();
     static ArrayList<Data> jatai = new ArrayList<Data>();
     static ArrayList<Data> todas = new ArrayList<Data>();
-    static String[] argss;
+    static ArrayList<DataComent> coment = new ArrayList<DataComent>();
     static boolean loaded = true;
 
     /**
@@ -28,7 +27,6 @@ class App {
      * @param args
      */
     public static void main(String[] args) {
-        argss = args;
         int op;
         boolean sair = false;
         try {
@@ -51,13 +49,13 @@ class App {
                         CriarEvento.criarEvento();
                         break;
                     case 3:
-                        EditarEventos.editarCalendario();
+                        ExibirData.exibirAnotacoes();
                         break;
                     case 4: {
                         try {
                             Buscas.buscarEvento();
                         } catch (ParseException ex) {
-                            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println("Ocorreu um Erro! tente novamente");
                         }
                     }
                     break;
@@ -82,7 +80,7 @@ class App {
         System.out.println("\t MENU");
         System.out.println(" 1 = Exibir Calendario");
         System.out.println(" 2 = Criar Evento");
-        System.out.println(" 3 = Editar Calendario");
+        System.out.println(" 3 = Ver Eventos Anotados");
         System.out.println(" 4 = Buscar Evento");
         System.out.println(" 0 = Sair");
     }
@@ -134,4 +132,5 @@ class App {
         System.out.println(" 4 - Jataí");
         System.out.println(" 0 - Voltar");
     }
+    
 }

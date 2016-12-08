@@ -16,9 +16,9 @@ public class DataComent extends Data {
     private String comentario;
     
     public DataComent(Calendar dataInicial, Calendar dataFinal, String titulo,
-            String descricao, Regional regional, int IdEvento,
+            String descricao, Regional regional, Classificacao classificacao, int IdEvento,
             String comentario) {
-        super(dataInicial, dataFinal, titulo, descricao, regional, IdEvento);
+        super(dataInicial, dataFinal, titulo, descricao, regional, classificacao, IdEvento);
         
         this.comentario = comentario;
         
