@@ -10,14 +10,16 @@ import com.github.jprnp.Calendario_Academico.calendarioacademico.util.Anotacao;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App.*;
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.AppHelper.*;
 
+import java.util.Scanner;
+
 /**
  *
  * @author Estevao
  */
 public class AnotarEvento {
-    
 
     static void anotarEvento(Data evento) {
+    	Scanner read = new Scanner(System.in);
         System.out.println("Deseja colocar alguma observação no evento?");
         System.out.println(" 1 - Sim");
         System.out.println(" 2 - Não");
@@ -29,7 +31,7 @@ public class AnotarEvento {
                 case 1:
                     do {
                         System.out.println("Escreva sua observação sobre o evento");
-                        c = leitor.nextLine();
+                        c = read.nextLine();
                         comente = c;
                         c.replaceAll(" ", "");
                     } while (c.equals(""));

@@ -10,6 +10,7 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.Exi
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,6 +24,7 @@ import java.util.Calendar;
 public class CriarEvento {
 
     public static void criarEvento() {
+    	Scanner read = new Scanner(System.in);
         boolean ok = false;
         // Regional reg = selecionarRegional("Criar Evento");
         ArrayList<Regional> regios = selecionarRegionais("Criar Evento");
@@ -49,10 +51,10 @@ public class CriarEvento {
         }
 
         System.out.println("Título do Evento:");
-        String titulo = leitor.nextLine();
+        String titulo = read.nextLine();
 
         System.out.println("Descricao do Evento:");
-        String descr = leitor.nextLine();
+        String descr = read.nextLine();
         int ans = 0;
         for (Regional reg : regios) {
             int id = 1, cod = reg.getRegionalNum();

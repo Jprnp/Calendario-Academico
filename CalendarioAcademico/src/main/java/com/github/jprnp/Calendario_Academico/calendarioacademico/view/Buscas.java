@@ -16,6 +16,7 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.Ano
 import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.EditarEventos.*;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -162,9 +163,10 @@ public class Buscas {
     }
 
     public static void bucarNome() throws ParseException {
+    	Scanner read = new Scanner(System.in);
         ArrayList<Data> busca = null;
         System.out.println("Digite o Nome do Evento:");
-        busca = CsvBusca.buscaTitulo(App.todas, leitor.nextLine());
+        busca = CsvBusca.buscaTitulo(App.todas, read.nextLine());
         if (busca.isEmpty()) {
             System.out.println("Nenhuma evento encontrado.");
         } else {
@@ -177,9 +179,10 @@ public class Buscas {
     }
 
     public static void buscaDescri() {
+    	Scanner read = new Scanner(System.in);
         ArrayList<Data> busca = null;
         System.out.println("Digite a busca:");
-        String busc = leitor.nextLine();
+        String busc = read.nextLine();
         busca = CsvBusca.buscaDescricao(App.todas, busc);
         for (Data data : CsvBusca.buscaTitulo(App.todas, busc)) {
             if (!busca.contains(data)) {

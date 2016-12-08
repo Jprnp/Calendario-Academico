@@ -14,13 +14,13 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.Exi
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Scanner;
 
 /**
  *
  * @author Estevao
  */
 class AppHelper {
-
     /**
      * Função que força o usuário a digitar uma data válida no formato
      * DD/MM/AAAA
@@ -28,6 +28,7 @@ class AppHelper {
      * @return String com a data digitada
      */
     static String readDateFormat() {
+    	Scanner read = new Scanner(System.in);
         String dt = "";
 
         // EXPRESSÃO REGULAR RESPONSÁVEL PELA VERIFICAÇÃO
@@ -38,7 +39,7 @@ class AppHelper {
 
         boolean done = false;
         do {
-            dt = leitor.nextLine();
+            dt = read.nextLine();
             if (dt.matches(regex)) {
                 done = true;
             } else {
@@ -51,6 +52,7 @@ class AppHelper {
     }
 
     static void carregarCalendarios() throws FileNotFoundException {
+    	Scanner read = new Scanner(System.in);
         try {
             catalao = CsvUtil.loadCsv(Regional.CATALAO);
         } catch (RuntimeException re1) {
@@ -249,8 +251,9 @@ class AppHelper {
     }
 
     static int readInteger() {
+    	Scanner read = new Scanner(System.in);
         try {
-            return leitor.nextInt();
+            return read.nextInt();
         } catch (NumberFormatException e) {
             System.out.println("Digite apenas numeros.");
             return readInteger();
@@ -258,8 +261,9 @@ class AppHelper {
     }
 
     static ArrayList<Regional> selecionarRegionais(String titulo) {
+    	Scanner read = new Scanner(System.in);
         menuSelecioneRegionais(titulo);
-        String selected = leitor.nextLine();
+        String selected = read.nextLine();
         selected = selected.replaceAll(" ", "");
         String[] split = selected.split(",");
         ArrayList<Regional> regions = new ArrayList<Regional>();

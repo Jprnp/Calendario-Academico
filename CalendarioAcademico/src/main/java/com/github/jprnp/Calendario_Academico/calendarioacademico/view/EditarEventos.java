@@ -17,6 +17,7 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.Exi
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 
 /**
  *
@@ -95,6 +96,7 @@ class EditarEventos {
     }
     
     static ArrayList<Data> editarCalendario2(int index, ArrayList<Data> calendario) {
+    	Scanner read = new Scanner(System.in);
         int op;
         boolean cancelar = false;
         do {
@@ -130,7 +132,7 @@ class EditarEventos {
                         break;
                     case 4:
                         System.out.println("Entre com uma nova descricao ou nome:");
-                        String descricao = leitor.nextLine();
+                        String descricao = read.nextLine();
                         calendario = editarDescriacao(index, calendario, descricao);
                         salvarCalendario();
                         break;
@@ -141,7 +143,7 @@ class EditarEventos {
                         break;
                     case 6:
                         System.out.println("Entre com uma nova descricao ou nome:");
-                        String titulo = leitor.nextLine();
+                        String titulo = read.nextLine();
                         calendario = editarTitulo(index, calendario, titulo);
                         salvarCalendario();
                     case 0:
