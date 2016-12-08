@@ -117,10 +117,10 @@ public class CsvUtil {
                     dtIni.setTime(SDF.parse(results[1]));
                     Calendar dtFim = Calendar.getInstance();
                     dtFim.setTime(SDF.parse(results[2]));
-                    String descricao = results[3];
-                    String titulo = results[6];
+                    String descricao = results[4];
+                    String titulo = results[3];
                     Regional regional = null;
-                    switch (Integer.parseInt(results[5])) {
+                    switch (Integer.parseInt(results[6])) {
                         case 1:
                             regional = Regional.CATALAO;
                             break;
@@ -139,7 +139,7 @@ public class CsvUtil {
                     }
 
                     Classificacao classificacao = null;
-                    switch (Integer.parseInt(results[4])) {
+                    switch (Integer.parseInt(results[5])) {
                         case 5:
                             classificacao = Classificacao.EVENTO;
                             break;
