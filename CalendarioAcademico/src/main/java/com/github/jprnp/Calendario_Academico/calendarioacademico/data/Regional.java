@@ -1,4 +1,4 @@
-package com.github.jprnp.Calendario_Academico.calendarioacademico;
+package com.github.jprnp.Calendario_Academico.calendarioacademico.data;
 
 /**
  * Enum das Constantes do nome das Regionaias
