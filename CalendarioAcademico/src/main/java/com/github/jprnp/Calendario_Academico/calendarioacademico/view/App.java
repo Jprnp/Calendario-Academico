@@ -9,8 +9,6 @@ import static com.github.jprnp.Calendario_Academico.calendarioacademico.view.App
 import java.text.ParseException;
 
 class App {
-
-    //<<<<<<< HEAD
     static Scanner leitor = new Scanner(System.in);
 
     static ArrayList<Data> catalao = new ArrayList<Data>();

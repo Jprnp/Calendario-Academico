@@ -46,7 +46,7 @@ public class Data {
   }
   
   public Data(Calendar data, String titulo, String descricao, Regional regional,
-          int idEvento, Classificacao classificacao) {
+              int idEvento, Classificacao classificacao) {
 
       this.dataInicial = data;
       this.dataFinal = null;

@@ -1,5 +1,10 @@
 package com.github.jprnp.Calendario_Academico.calendarioacademico.util;
 
+import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Classificacao;
+import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Data;
+import com.github.jprnp.Calendario_Academico.calendarioacademico.data.DataComent;
+import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Regional;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -11,11 +16,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
-
-import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Classificacao;
-import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Data;
-import com.github.jprnp.Calendario_Academico.calendarioacademico.data.DataComent;
-import com.github.jprnp.Calendario_Academico.calendarioacademico.data.Regional;
 
 /**
  * Classe utilitária para operações relacionadas ao arquivo CSV.
@@ -30,11 +30,11 @@ public class CsvUtil {
     static final String NEWLINE = "\n";
     static final String HEADER = "idEvento,dataInicial,dataFinal,"
             + "descricao,classificacao,regional";
+    static final String FILECOMENT = "coment.csv";
     static final String FILECATALAO = "catalao.csv";
     static final String FILEGOIANIA = "goiania.csv";
     static final String FILEGOIAS = "goias.csv";
     static final String FILEJATAI = "jatai.csv";
-    static final String FILECOMENT = "coment.csv";
     public static final String FILENAME = "calacaddata.csv";
     public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -48,12 +48,22 @@ public class CsvUtil {
      * @return Lista após a exclusão do evento
      * @throws RuntimeException Caso o evento não seja encontrado
      */
-    public static ArrayList<Data> deletarEvento(ArrayList<Data> lista, int index)
+    public static ArrayList<Data> deletarEvento(ArrayList<Data> lista, int idEvento)
             throws RuntimeException {
 
-        if (index < lista.size()) {
-            lista.remove(index);
-        } else {
+        int contador = 0;
+
+        for (Data d : lista) {
+
+            if (d.getIdEvento() == idEvento) {
+                lista.remove(contador);
+                break;
+            } else {
+                contador++;
+            }
+        }
+
+        if (contador == lista.size()) {
             throw new RuntimeException("Evento não encontrado.");
         }
 
@@ -119,10 +129,9 @@ public class CsvUtil {
                     dtIni.setTime(SDF.parse(results[1]));
                     Calendar dtFim = Calendar.getInstance();
                     dtFim.setTime(SDF.parse(results[2]));
-                    String descricao = results[4];
-                    String titulo = results[3];
+                    String descricao = results[3];
                     Regional regional = null;
-                    switch (Integer.parseInt(results[6])) {
+                    switch (Integer.parseInt(results[4])) {
                         case 1:
                             regional = Regional.CATALAO;
                             break;
@@ -141,25 +150,25 @@ public class CsvUtil {
                     }
 
                     Classificacao classificacao = null;
-                    switch (Integer.parseInt(results[5])) {
-                        case 5:
+                    switch (Integer.parseInt(results[4])) {
+                        case 1:
                             classificacao = Classificacao.EVENTO;
                             break;
-                        case 1:
+                        case 2:
                             classificacao = Classificacao.FERIADO_NACIONAL;
                             break;
-                        case 2:
+                        case 3:
                             classificacao = Classificacao.FERIADO_MUNICIPAL;
                             break;
-                        case 3:
+                        case 4:
                             classificacao = Classificacao.PONTO_FACUTATIVO;
                             break;
-                        case 4:
+                        case 5:
                             classificacao = Classificacao.RECESSO_ACADEMICO;
                             break;
                     }
 
-                    eventos.add(new Data(dtIni, dtFim, titulo, descricao, regional,
+                    eventos.add(new Data(dtIni, dtFim, descricao, regional,
                             classificacao, id));
                 } catch (ParseException pe) {
                     throw new RuntimeException(pe.getMessage());
@@ -212,7 +221,6 @@ public class CsvUtil {
                     break;
             }
             FileWriter writer = new FileWriter(new File(name), false);
-
             writer.append(HEADER);
             for (Data e : eventos) {
                 writer.append(NEWLINE);
@@ -222,15 +230,12 @@ public class CsvUtil {
                 writer.append(COMMA);
                 writer.append(SDF.format(e.getDataFinal().getTime()));
                 writer.append(COMMA);
-                writer.append(e.getTitulo());
-                writer.append(COMMA);
                 writer.append(e.getDescricao());
                 writer.append(COMMA);
                 writer.append(String.valueOf(e.getClassificacao()
                         .getClassificacaoNum()));
                 writer.append(COMMA);
                 writer.append(String.valueOf(e.getRegional().getRegionalNum()));
-
             }
             writer.flush();
             writer.close();
@@ -238,49 +243,6 @@ public class CsvUtil {
         } catch (IOException ex) {
             //System.out.println(ex.getMessage());
             throw new RuntimeException(ex.getMessage());
-        }
-    }
-
-    public static void generateEmptyCsv(ArrayList<Data> eventos, int regId) {
-        String name = null;
-        switch (regId) {
-            case 1:
-                name = FILECATALAO;
-                break;
-            case 2:
-                name = FILEGOIANIA;
-                break;
-            case 3:
-                name = FILEGOIAS;
-                break;
-            case 4:
-                name = FILEJATAI;
-                break;
-        }
-        try {
-            FileWriter writer = new FileWriter(new File(name), false);
-            writer.append(HEADER);
-            writer.flush();
-            writer.close();
-            //System.out.println("Dados armazenados com sucesso!");
-        } catch (IOException ex) {
-            //System.out.println(ex.getMessage());
-            throw new RuntimeException(ex.getMessage());
-        }
-    }
-
-    public static int generateNewId(ArrayList<Data> eventos) {
-        int maiorId = 0;
-
-        if (!eventos.isEmpty()) {
-            for (Data dt : eventos) {
-                if (dt.getIdEvento() > maiorId) {
-                    maiorId = dt.getIdEvento();
-                }
-            }
-            return maiorId + 1;
-        } else {
-            return 1;
         }
     }
 
@@ -377,11 +339,25 @@ public class CsvUtil {
         }
     }
 
-    public static void generateEmptyCsv(ArrayList<DataComent> eventos) {
-        String name = FILECOMENT;
+    public static void generateEmptyCsv(ArrayList<Data> eventos, int regId) {
+        String name = null;
+        switch (regId) {
+            case 1:
+                name = FILECATALAO;
+                break;
+            case 2:
+                name = FILEGOIANIA;
+                break;
+            case 3:
+                name = FILEGOIAS;
+                break;
+            case 4:
+                name = FILEJATAI;
+                break;
+        }
         try {
             FileWriter writer = new FileWriter(new File(name), false);
-            writer.append(HEADER + ",coment");
+            writer.append(HEADER);
             writer.flush();
             writer.close();
             //System.out.println("Dados armazenados com sucesso!");
@@ -390,4 +366,5 @@ public class CsvUtil {
             throw new RuntimeException(ex.getMessage());
         }
     }
+
 }
